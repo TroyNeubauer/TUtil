@@ -18,9 +18,6 @@ IncludeDir["str"] = "TUtil/vendor/ocornut_str"
 IncludeDir["libarchive"] = "TUtil/vendor/libarchive/libarchive"
 
 
-include "TUtil/vendor/ocornut_str"
-include "TUtil/vendor/libarchive"
-
 project "TUtil"
 	location "TUtil"
 
@@ -47,8 +44,6 @@ project "TUtil"
 	includedirs
 	{
 		"%{prj.name}/include/",
-		"%{IncludeDir.str}",
-		"%{IncludeDir.libarchive}",
 	}
 
 	links 
@@ -59,41 +54,6 @@ project "TUtil"
 	{
 	}
 
-	filter "system:windows"
-
-		links
-		{
-		}
-
-		defines
-		{
-			"T_PLATFORM_WINDOWS",
-		}
-
-
-	filter "system:linux"
-	
-		links
-		{
-		}
-
-		defines
-		{
-			"T_PLATFORM_UNIX",
-			"T_PLATFORM_LINUX",
-		}
-
-	filter "system:macosx"
-
-		links
-		{
-		}
-
-		defines
-		{
-			"T_PLATFORM_UNIX",
-			"T_PLATFORM_OSX",
-		}
 
 	filter "configurations:Debug"
 		defines "T_DEBUG"
@@ -125,6 +85,8 @@ project "Test"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		""
+
 	}
 
 	includedirs
