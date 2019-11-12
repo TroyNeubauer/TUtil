@@ -1,0 +1,7 @@
+[submodule "TUtil/vendor/str"]
+	path = TUtil/vendor/str
+	url = https://github.com/ocornut/str.git
+[submodule "TUtil/vendor/libarchive"]
+	path = TUtil/vendor/libarchive
+	url = https://github.com/libarchive/libarchive.git
+	branch = release
