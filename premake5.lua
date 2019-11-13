@@ -48,7 +48,7 @@ end
 
 workspace "TUtil"
 	architecture "x64"
-	startproject "TUtilTest"
+	startproject "Test"
 
 	configurations
 	{
@@ -86,7 +86,8 @@ project "TUtil"
 	{
 		"%{prj.name}/include/",
 		"%{VendorIncludeDir}/str",
-		"%{VendorIncludeDir}/libarchive",
+		"%{VendorIncludeDir}/libarchive/libarchive",
+		"TUtil/vendor/libarchive/libarchive",
 	}
 
 	print "Copying dependent files..."
@@ -101,7 +102,11 @@ project "TUtil"
 	defines
 	{
 	}
+	filter "system:windows"
+		links
+		{
 
+		}
 
 	filter "configurations:Debug"
 		defines "T_DEBUG"
@@ -133,7 +138,7 @@ project "Test"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-
+		"%{prj.name}/src/**.c",
 	}
 
 	includedirs
@@ -141,6 +146,9 @@ project "Test"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/",
 		"TUtil/include/",
+		"%{VendorIncludeDir}/str",
+		"%{VendorIncludeDir}/libarchive/libarchive",
+		"TUtil/vendor/libarchive/libarchive",
 	}
 
 	links 
@@ -151,6 +159,13 @@ project "Test"
 	defines
 	{
 	}
+
+	filter "system:windows"
+		links
+		{
+			"Pdh.lib",
+			"kernel32.lib",
+		}
 
 	filter "configurations:Debug"
 		runtime "Debug"

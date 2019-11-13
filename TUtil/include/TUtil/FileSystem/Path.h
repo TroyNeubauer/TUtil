@@ -4,7 +4,7 @@
 #include "TUtil/vendor/str/Str.h"
 #include "TUtil/FileSystem/FileEnums.h"
 
-namespace Hazel {
+namespace TUtil {
 
 	class File;
 	

@@ -1,10 +1,12 @@
-#include "hzpch.h"
-#ifdef HZ_PLATFORM_WINDOWS
+#include "TUtil/Core.h"
 
-#include "Hazel/System/Timer.h"
-#include "Hazel/System/System.h"
+#ifdef T_PLATFORM_WINDOWS
 
-namespace Hazel {
+#include "TUtil/Timer.h"
+#include "TUtil/System.h"
+#include "WindowsUtils.h"
+
+namespace TUtil {
 	Timer::Timer()
 	{
 		Start();

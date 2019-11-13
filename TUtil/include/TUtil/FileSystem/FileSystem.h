@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Hazel/Core.h"
-#include "Hazel/Util/StringUtils.h"
+#include "TUtil/StringUtils.h"
 
 #include <functional>
 #include <utility>
@@ -10,22 +9,20 @@
 
 #include "FileEnums.h"
 
-
-#ifdef HZ_PLATFORM_WINDOWS//The Win32 API is truly evil
+#ifdef T_PLATFORM_WINDOWS
 	#undef CreateFile
 	#undef CreateDirectory
 	#undef DeleteFile
 #endif
 
-
-namespace Hazel {
+namespace TUtil {
 
 	enum class FileError;
 
 	class FileSystem
 	{
 	public:
-		static const uint64_t ENTIRE_FILE = (uint64_t) -1;
+		static const uint64_t ENTIRE_FILE = (uint64_t) -1, INVALID_FILE = (uint64_t) -1;
 		//Maps a section of a file into virtual memory
 		//This function returns the pointer to the memory and the length of the file
 		static void* MapFile(const char* file, FileOpenOptions options, uint64_t& fileLength, FileError* error, uint64_t offset = 0, uint64_t bytes = ENTIRE_FILE);
@@ -34,6 +31,8 @@ namespace Hazel {
 		//The following functions return true if their operation succeeded and false otherwise.
 		static bool Exists(const char* path);
 		static bool IsDirectory(const char* path);
+
+		static uint64_t FileSize(const char* path);
 
 		//Creates a new file with the name and location specified by path
 		//The return value indicates weather or not a new file was created. 
@@ -70,9 +69,9 @@ namespace Hazel {
 		//This is marked always inline because onPath will almost always be a lambda, therefore inlining this function will usually
 		//lead the compiler to inline the lambda too
 		template<typename F>
-		HZ_ALWAYS_INLINE static void PathNameIterator(const char* path, F onPath);
+		inline static void PathNameIterator(const char* path, F onPath);
 		template<typename F>
-		HZ_ALWAYS_INLINE static void PathNameIterator(char* path, F onPath);
+		inline static void PathNameIterator(char* path, F onPath);
 
 		static bool PathsEqual(const char* a, const char* b);
 
@@ -85,7 +84,7 @@ namespace Hazel {
 
 		static inline char GetSlashCharacter()
 		{
-#ifdef HZ_PLATFORM_WINDOWS
+#ifdef T_PLATFORM_WINDOWS
 			return '\\';
 #else
 			return '/';

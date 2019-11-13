@@ -3,11 +3,16 @@
 #include "TUtil/FileSystem.h"
 #include "TUtil/Util/Timer.h"
 
-namespace Hazel {
+namespace TUtil {
 
 	bool FileSystem::Exists(const char* path)
 	{
 		return false;
+	}
+
+	uint64_t FileSystem::FileSize(const char* path)
+	{
+		return 0;
 	}
 
 	bool FileSystem::PathsEqual(const char* a, const char* b)

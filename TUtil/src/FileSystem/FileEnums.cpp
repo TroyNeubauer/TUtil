@@ -1,8 +1,6 @@
-#include "hzpch.h"
+#include "TUtil/FileSystem/FileEnums.h"
 
-#include "FileEnums.h"
-
-namespace Hazel {
+namespace TUtil {
 
 	static const char* fileErrorNames[] = { "No Error", "File Not Found", "Access Denied", "Too Many Files Open", "Not Enough Memory", "Is Directory", "Invalid Parameter", "Unknown Error" };
 	static const int s_ErrorNamesLength = sizeof(fileErrorNames) / sizeof(const char*);

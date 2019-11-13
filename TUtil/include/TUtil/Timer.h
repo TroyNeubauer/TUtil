@@ -1,22 +1,19 @@
 #pragma once
 
 #include <stdint.h>
-#include <spdlog/logger.h>
-
-#include "Hazel/Log.h"
 
 
-#ifdef HZ_PLATFORM_WINDOWS
+#ifdef T_PLATFORM_WINDOWS
 	#include <Windows.h>
 	typedef LARGE_INTEGER TimeType;
-#elif defined(HZ_PLATFORM_UNIX)
+#elif defined(T_PLATFORM_UNIX)
 	#include <time.h>
 	typedef timespec TimeType;
 #else
 	#error
 #endif
 
-namespace Hazel {
+namespace TUtil {
 	class Timer {
 	public:
 		//Constructing a timer starts it
@@ -53,14 +50,11 @@ namespace Hazel {
 				snprintf(buf, bufSize, "%s %.3f seconds", message,		(double) nanos / 1000000000.0);
 		}
 		
-		inline Timer& Print(const char* message, spdlog::level::level_enum level = spdlog::level::info)
+		inline Timer& Print(const char* message)
 		{
-			if (Log::GetCoreLogger()->should_log(level))
-			{
-				char buf[512];
-				FormatNanos(buf, sizeof(buf), message, Nanos());
-				Log::GetCoreLogger()->log(level, buf);	
-			}
+			char buf[512];
+			FormatNanos(buf, sizeof(buf), message, Nanos());
+			printf("%s\n", buf);
 			return *this;
 		}
 		
@@ -72,17 +66,16 @@ namespace Hazel {
 	class ScopedTimer
 	{
 	public:
-		inline ScopedTimer(const char* message = "[Scoped Timer] Time: ", spdlog::level::level_enum level = spdlog::level::level_enum::info) 
-			: m_Message(message), m_Level(level) {}
+		inline ScopedTimer(const char* message = "[Scoped Timer] Time: ") 
+			: m_Message(message) {}
 		
 		inline ~ScopedTimer()
 		{
-			timer.Stop().Print(m_Message, m_Level);
+			timer.Stop().Print(m_Message);
 		}
 
 	private:
 		const char* m_Message;
-		spdlog::level::level_enum m_Level;
 		Timer timer;
 	};
 

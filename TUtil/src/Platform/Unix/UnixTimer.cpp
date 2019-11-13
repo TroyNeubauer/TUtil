@@ -3,7 +3,7 @@
 #include "Hazel/System/Timer.h"
 #include "Hazel/System/System.h"
 
-namespace Hazel {
+namespace TUtil {
 	Timer::Timer()
 	{
 		Start();

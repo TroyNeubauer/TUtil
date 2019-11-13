@@ -1,16 +1,16 @@
-#include "hzpch.h"
-#include "NumberUtils.h"
 
-namespace Hazel {
-#ifdef HZ_PLATFORM_WINDOWS
+#include "TUtil/Math/Integer.h"
+
+namespace TUtil {
+#ifdef T_PLATFORM_WINDOWS
 	#include <intrin.h>
 	#include <Windows.h>
 #else
 
 #endif
 
-	uint32_t NumberUtils::GetMinBitPosition(uint64_t value) {
-#ifdef HZ_PLATFORM_WINDOWS
+	uint32_t Integer::GetMinBitPosition(uint64_t value) {
+#ifdef T_PLATFORM_WINDOWS
 		DWORD result;
 		BitScanForward64(&result, value);//TODO provide other implementation for non Windows platforms
 		return result;
@@ -22,8 +22,8 @@ namespace Hazel {
 #endif
 	}
 
-	uint64_t NumberUtils::CountBits(uint64_t value) {
-#ifdef HZ_PLATFORM_WINDOWS
+	uint64_t Integer::CountBits(uint64_t value) {
+#ifdef T_PLATFORM_WINDOWS
 		return _mm_popcnt_u64(value);//TODO other implementation for non X86
 #else
 		int count = 0;
@@ -34,7 +34,7 @@ namespace Hazel {
 #endif
 	}
 
-	uint64_t NumberUtils::RoundUp(uint64_t value, uint64_t multiple) {
+	uint64_t Integer::RoundUp(uint64_t value, uint64_t multiple) {
 		if (multiple == 0)
 			return value;
 

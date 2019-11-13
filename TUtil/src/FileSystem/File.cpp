@@ -1,10 +1,11 @@
 #include "TUtil/FileSystem/File.h"
 #include "TUtil/FileSystem.h"
+#include "TUtil/Core.h"
 
 #include <archive.h>
 #include <archive_entry.h>
 
-namespace Hazel {
+namespace TUtil {
 
 	static File* OpenRegularFile(const char* path, FileOpenOptions options, FileError* error, uint64_t& length)
 	{
@@ -15,7 +16,7 @@ namespace Hazel {
 	}
 
 
-	File* Hazel::File::Open(Path& p_Path, FileOpenOptions p_Options, FileError* p_Error)
+	File* File::Open(Path& p_Path, FileOpenOptions p_Options, FileError* p_Error)
 	{
 		uint64_t length;
 		if (p_Path.m_InArchive)
@@ -60,7 +61,7 @@ namespace Hazel {
 				}
 				result = new ArchivedFile(parent, p_Path, p_Options, p_Error);
 			}
-			HZ_CORE_ASSERT(false, "Unable to find seperation between archive file and internal file!");
+			T_ASSERT(false, "Unable to find seperation between archive file and internal file!");
 			return result;
 		}
 		else
@@ -92,7 +93,7 @@ namespace Hazel {
 				r = archive_read_data(a, m_Data, m_Length);
 				if (r < 0)// Error
 					goto finish;
-				HZ_CORE_ASSERT(r == m_Length, "Did not read entire entry! Expected length: {}, Bytes actually read {}", m_Length, r);
+				T_ASSERT(r == m_Length, "Did not read entire entry! Expected length: {}, Bytes actually read {}", m_Length, r);
 				m_Data[m_Length] = 0x00;
 
 				goto finish;
@@ -137,7 +138,7 @@ namespace Hazel {
 
 	void ArchivedFile::Read(void* data, uint64_t bytes, uint64_t offset)
 	{
-		HZ_CORE_ASSERT(offset + bytes <= m_Length, "Attempt to read past the end of the buffer");
+		T_ASSERT(offset + bytes <= m_Length, "Attempt to read past the end of the buffer");
 		memcpy(data, m_Data + offset, bytes);
 	}
 
@@ -188,7 +189,7 @@ namespace Hazel {
 
 	void MemoryMappedFile::Read(void* data, uint64_t bytes, uint64_t offset)
 	{
-		HZ_CORE_ASSERT(offset + bytes <= m_Length, "Attempt to read past the end of the buffer");
+		T_ASSERT(offset + bytes <= m_Length, "Attempt to read past the end of the buffer");
 		memcpy(data, m_Data + offset, bytes);
 	}
 

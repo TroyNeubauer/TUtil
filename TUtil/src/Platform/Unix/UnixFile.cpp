@@ -13,7 +13,7 @@
 #include "TUtil/FileSystem.h"
 #include "Platform/System/FileTrackerFunctions.h"
 
-namespace Hazel {
+namespace TUtil {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
 	File::File(const char* path, bool sequential, FileError* error) : m_Path(path)

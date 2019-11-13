@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <malloc.h>
 
-namespace Hazel {
+namespace TUtil {
 
 	class System
 	{
@@ -37,19 +37,6 @@ namespace Hazel {
 		static uint64_t AllocationGranularity();
 		static uint64_t PerformanceCounterResulution();
 
-//REMOVE
-		static uint32_t GetMinBitPosition(uint64_t value);
-		static uint64_t CountBits(uint64_t value);
-		static inline uint64_t CountZeroBits(uint64_t value) { return CountBits(~value); }
-
-		static void RoundUp(uint64_t& value, uint64_t multiple);
-		template<typename T>
-		static T CeilDivide(T a, T b) {
-			if (a == 0)
-				return 0;
-			return (a - 1) / b + 1;
-		}
-
 		static uint64_t LogFloor(uint64_t value);
 		//Computes the log base 2 for the value and rounds up. Ex 2->1, 4->2, 5->3, 8->3
 		//We need to make powers of two produce the largest value for a given input.
@@ -63,7 +50,7 @@ namespace Hazel {
 	inline T* System::FastNew(size_t elements)
 	{
 		const size_t bytes = sizeof(T) * elements;
-#ifdef HZ_PLATFORM_WINDOWS
+#ifdef T_PLATFORM_WINDOWS
 		return (T*) _malloca(bytes);
 #else
 		return (T*) malloc(bytes);
@@ -72,7 +59,7 @@ namespace Hazel {
 
 	inline void System::FastDelete(void* ptr)
 	{
-#ifdef HZ_PLATFORM_WINDOWS
+#ifdef T_PLATFORM_WINDOWS
 		_freea(ptr);
 #else
 		free(ptr);

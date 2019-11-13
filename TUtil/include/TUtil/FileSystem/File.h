@@ -6,7 +6,7 @@
 #include "Path.h"
 
 
-namespace Hazel {
+namespace TUtil {
 
 	//A class that uses fast, low-level API's quiclky access files
 	//Be warned, a file handle will be opened upon constructing an instance of this object

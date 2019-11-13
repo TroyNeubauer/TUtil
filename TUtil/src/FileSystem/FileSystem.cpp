@@ -1,10 +1,12 @@
-#include "hzpch.h"
-#include "Hazel/System/Path.h"
-#include "Hazel/System/Timer.h"
+
+#include "TUtil/FileSystem/FileSystem.h"
+#include "TUtil/FileSystem/Path.h"
+#include "TUtil/Timer.h"
+#include "TUtil/StringUtils.h"
 
 #include <stdint.h>
 
-namespace Hazel {
+namespace TUtil {
 
 	const uint32_t MAX_SLASHES = 128;
 

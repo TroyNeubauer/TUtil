@@ -1,34 +1,90 @@
+#include "TUtil/Core.h"
 #ifdef T_PLATFORM_WINDOWS
 
 #include "TUtil/FileSystem.h"
 #include "WindowsUtils.h"
 #include "TUtil/StringUtils.h"
 
-namespace Hazel {
+namespace TUtil {
+
+
+	static thread_local wchar_t winUTF16Buf[1024];
+	static thread_local char winUTF8Buf[1024];
+
+
+
+	static wchar_t* ToUTF16(const char* text, wchar_t* dest, int bytes)
+	{
+		int result = MultiByteToWideChar(CP_UTF8, 0, text, -1, dest, bytes / sizeof(wchar_t));
+		if (result == 0)
+		{
+			char buf[256];
+			WindowsUtils::GetLastErrorMessage(buf, sizeof(buf));
+			T_ERROR("Unable to convert string: \"%s\" to UTF16. The error message is: %s\n", text, buf);
+		}
+		return dest;
+	}
+
+	static wchar_t* ToUTF16(const char* text)
+	{
+		return ToUTF16(text, winUTF16Buf, sizeof(winUTF16Buf));
+	}
+
+
+	static const char* FromUTF16(const wchar_t* text, char* dest, int bytes)
+	{
+		int result = WideCharToMultiByte(CP_UTF8, 0, text, -1, dest, bytes, nullptr, nullptr);
+		if (result == 0)
+		{
+			char buf[256];
+			WindowsUtils::GetLastErrorMessage(buf, sizeof(buf));
+			T_ERROR("Unable to convert string from UTF16 to UTF8. The error message is: %s\n", buf);
+		}
+		return dest;
+	}
+
+	static const char* FromUTF16(const wchar_t* text)
+	{
+		return FromUTF16(text, winUTF8Buf, sizeof(winUTF8Buf));
+	}
 
 	bool FileSystem::Exists(const char* path)
 	{
-		DWORD atts = GetFileAttributesA(path);
+		DWORD atts = GetFileAttributesW(ToUTF16(path));
 		return atts != INVALID_FILE_ATTRIBUTES;
 	}
 
 	bool FileSystem::PathsEqual(const char* a, const char* b)
 	{
-		char fullA[512], fullB[512];
-		GetFullPathNameA(a, sizeof(fullA), fullA, nullptr);
-		GetFullPathNameA(b, sizeof(fullB), fullB, nullptr);
+		wchar_t fullA[512], fullB[512];
+		GetFullPathNameW(ToUTF16(a), sizeof(fullA), fullA, nullptr);
+		GetFullPathNameW(ToUTF16(b), sizeof(fullB), fullB, nullptr);
+
 		return StringUtils::Equal(fullA, fullB);
+	}
+
+	uint64_t FileSystem::FileSize(const char* path)
+	{
+		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (handle == INVALID_HANDLE_VALUE)
+		{
+			return INVALID_FILE;
+		}
+		LARGE_INTEGER size;
+		GetFileSizeEx(handle, &size);
+		CloseHandle(handle);
+		return size.QuadPart;
 	}
 
 	bool FileSystem::IsDirectory(const char* path)
 	{
-		DWORD atts = GetFileAttributesA(path);
+		DWORD atts = GetFileAttributesW(ToUTF16(path));
 		return atts & FILE_ATTRIBUTE_DIRECTORY;
 	}
 
 	bool FileSystem::CreateFile(const char* path)
 	{
-		HANDLE handle = CreateFileA(path, GENERIC_READ, 0, nullptr, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
+		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_READ, 0, nullptr, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
 		if (handle == INVALID_HANDLE_VALUE)
 		{
 			return false;
@@ -39,7 +95,7 @@ namespace Hazel {
 
 	bool FileSystem::CreateFileWithParents(const char* path)
 	{
-		HANDLE handle = CreateFileA(path, GENERIC_READ, 0, nullptr, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
+		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_READ, 0, nullptr, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
 		if (handle == INVALID_HANDLE_VALUE)
 		{
 			return false;
@@ -50,7 +106,8 @@ namespace Hazel {
 
 	bool FileSystem::CreateDirectory(const char* path)
 	{
-		if (CreateDirectoryA(path, nullptr))
+		
+		if (CreateDirectoryW(ToUTF16(path), nullptr))
 		{
 			return true;
 		}
@@ -59,7 +116,7 @@ namespace Hazel {
 
 	bool FileSystem::CreateDirectories(const char* path)
 	{
-		HANDLE handle = CreateFileA(path, GENERIC_READ, 0, nullptr, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
+		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_READ, 0, nullptr, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
 		if (handle == INVALID_HANDLE_VALUE)
 		{
 			return false;
@@ -70,7 +127,7 @@ namespace Hazel {
 
 	bool FileSystem::TruncateFile(const char* path)
 	{
-		HANDLE handle = CreateFileA(path, GENERIC_WRITE, 0, nullptr, TRUNCATE_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_WRITE, 0, nullptr, TRUNCATE_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 		if (handle == INVALID_HANDLE_VALUE)
 		{
 			if (GetLastError() == ERROR_FILE_NOT_FOUND)
@@ -89,7 +146,7 @@ namespace Hazel {
 
 	bool FileSystem::Delete(const char* path)
 	{
-		return DeleteFileA(path);
+		return DeleteFileW(ToUTF16(path));
 	}
 
 
@@ -108,7 +165,7 @@ namespace Hazel {
 		if (p_Options & READ) desiredAccess |= GENERIC_READ;
 		if (p_Options & WRITE) desiredAccess |= GENERIC_WRITE;
 		
-		HANDLE handle = CreateFileA(p_File, desiredAccess, FILE_SHARE_READ, NULL, OPEN_EXISTING, flags, NULL);
+		HANDLE handle = CreateFileW(ToUTF16(p_File), desiredAccess, FILE_SHARE_READ, NULL, OPEN_EXISTING, flags, NULL);
 
 		if (handle == INVALID_HANDLE_VALUE)
 		{
@@ -132,16 +189,7 @@ namespace Hazel {
 			}
 			return nullptr;
 		}
-#ifdef HZ_DEBUG
-		const char* foAccess;
-		if ((p_Options & READ) && p_Options & WRITE) foAccess = "rw";
-		else if (p_Options & READ) foAccess = "r";
-		else if (p_Options & WRITE) foAccess = "w";
-		else foAccess = "";
-		Log_fopen((FILE*) handle, p_File, foAccess, __FILE__, __LINE__);
-#elif HZ_RELEASE
-		Log_fopen((FILE*) handle, p_File);
-#endif
+
 		LARGE_INTEGER size;
 		if (!GetFileSizeEx(handle, &size))
 		{
@@ -155,7 +203,7 @@ namespace Hazel {
 		p_FileLength = size.QuadPart;
 		if (p_FileLength == 0)
 		{
-			HZ_CORE_ASSERT(false, "Unable to memory map file of length 0!");
+			T_ASSERT(false, "Unable to memory map file of length 0!");
 		}
 
 		DWORD protect = 0;
@@ -167,13 +215,13 @@ namespace Hazel {
 				* p_Error = FileError::INVALID_PARAMETER;
 			goto fail;
 		}
-		HANDLE viewHandle = CreateFileMappingA(handle, nullptr, protect, (p_Bytes >> 32) & 0xFFFFFFFFULL, p_Bytes & 0xFFFFFFFFULL, nullptr);
+		HANDLE viewHandle = CreateFileMappingW(handle, nullptr, protect, (p_Bytes >> 32) & 0xFFFFFFFFULL, p_Bytes & 0xFFFFFFFFULL, nullptr);
 
 		if (viewHandle == nullptr)
 		{
 			char errorMessage[1024];
 			WindowsUtils::GetLastErrorMessage(errorMessage, sizeof(errorMessage));
-			HZ_CORE_ERROR("Failed to create file mapping for file: \"{0}\", error from CreateFileMappingA is: {1}", p_File, errorMessage);
+			T_ERROR("Failed to create file mapping for file: \"%s\", error from CreateFileMappingA is: %s", p_File, errorMessage);
 			if (p_Error)
 				*p_Error = FileError::UNKNOWN;
 			goto fail;
@@ -188,7 +236,7 @@ namespace Hazel {
 		{
 			char errorMessage[1024];
 			WindowsUtils::GetLastErrorMessage(errorMessage, sizeof(errorMessage));
-			HZ_CORE_ERROR("Failed to map view of file: \"{0}\", error from MapViewOfFile2 is: {1}", p_File, errorMessage);
+			T_ERROR("Failed to map view of file: \"%s\", error from MapViewOfFile2 is: %s", p_File, errorMessage);
 			if (p_Error)
 				* p_Error = FileError::UNKNOWN;//FIXME: report proper errors
 			CloseHandle(viewHandle);
@@ -199,37 +247,8 @@ namespace Hazel {
 		return data;
 	fail:
 		CloseHandle(handle);
-#ifdef HZ_DEBUG
-		Log_fclose((FILE*)handle, 0, __FILE__, __LINE__);
-#elif HZ_RELEASE
-		Log_fclose((FILE*)handle, 0);
-#endif
 		return nullptr;
-		/*
-		//Try to reserve another page for the null terminator to avoid copying the data on ToString()
-		if ((options & READ_ONLY) && !(options & WRITE_ONLY)) {
-			void* neededAddress = (char*)data + length;
-			if (length % pageSize == 0)//There is no null byte since the string takes up an entire page
-			{
-				void* otherPage = VirtualAlloc(neededAddress, pageSize, MEM_COMMIT | MEM_RESERVE, PAGE_READONLY);
-				if (neededAddress != otherPage)
-				{
-					if (otherPage == nullptr) {
-						char errorMessage[1024];
-						WindowsUtils::GetLastErrorMessage(errorMessage, sizeof(errorMessage));
-						HZ_CORE_ERROR("Failed to allocate page for null terminator: error from VirtualAlloc is: {0}", errorMessage);
-					}
-					//The page couldn't be allocated where it needed to be
-					//So allocate a buffer big enough, release all the file handles, and then give the user the buffer
-					char* newData = (char*)malloc(length + 1);
-					memcpy(newData, data, length);
-					newData[length] = 0x00;//Ensure there is a null byte at the end
 
-					CloseHandle(handle);//We no longer need the file, all the data is safely in newData
-					UnmapViewOfFile(data);
-				}
-			}
-		}*/
 	}
 
 	void FileSystem::UnmapFile(void* file)

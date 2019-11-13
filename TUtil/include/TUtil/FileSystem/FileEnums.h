@@ -1,7 +1,8 @@
 #pragma once
 
+#include "TUtil/Core.h"
 
-namespace Hazel {
+namespace TUtil {
 
 	enum FileOpenOptions
 	{

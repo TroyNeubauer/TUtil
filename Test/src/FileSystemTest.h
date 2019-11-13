@@ -5,12 +5,12 @@
 #include "TUtil/FileSystem.h"
 
 TEST_CASE("FileSystem::CreateDirectory", "[filesystem]") {
-	REQUIRE(Empire::FileSystem::CreateDirectory("./test/"));
+	REQUIRE(TUtil::FileSystem::CreateDirectory("./test/"));
 }
 
 TEST_CASE("FileSystem::CreateDirectories", "[filesystem]") {
 
-	REQUIRE(Empire::FileSystem::CreateDirectories("test/test2/test3/"));
+	REQUIRE(TUtil::FileSystem::CreateDirectories("test/test2/test3/"));
 }
 
 TEST_CASE("FileSystem::Delete", "[filesystem]") {
@@ -19,7 +19,7 @@ TEST_CASE("FileSystem::Delete", "[filesystem]") {
 	REQUIRE(f != nullptr);
 	REQUIRE(fwrite(fileName, 1, sizeof(fileName), f) == sizeof(fileName));
 	REQUIRE(fclose(f) == 0);
-	Empire::FileSystem::Delete(fileName);
+	TUtil::FileSystem::Delete(fileName);
 	REQUIRE(fopen(fileName, "rb") == nullptr);
 	
 }
@@ -30,8 +30,8 @@ TEST_CASE("FileSystem::FileLength", "[filesystem]") {
 	REQUIRE(f != nullptr);
 	REQUIRE(fwrite(fileName, 1, sizeof(fileName), f) == sizeof(fileName));
 	REQUIRE(fclose(f) == 0);
-	REQUIRE(Empire::FileSystem::FileSize(fileName) == sizeof(fileName));
-	Empire::FileSystem::Delete(fileName);
+	REQUIRE(TUtil::FileSystem::FileSize(fileName) == sizeof(fileName));
+	TUtil::FileSystem::Delete(fileName);
 }
 
 TEST_CASE("FileSystem::TruncateFile", "[filesystem]") {
@@ -40,19 +40,19 @@ TEST_CASE("FileSystem::TruncateFile", "[filesystem]") {
 	REQUIRE(f != nullptr);
 	REQUIRE(fwrite(fileName, 1, sizeof(fileName), f) == sizeof(fileName));
 	REQUIRE(fclose(f) == 0);
-	REQUIRE(Empire::FileSystem::TruncateFile(fileName));
-	REQUIRE(Empire::FileSystem::FileSize(fileName) == 0);
-	Empire::FileSystem::Delete(fileName);
+	REQUIRE(TUtil::FileSystem::TruncateFile(fileName));
+	REQUIRE(TUtil::FileSystem::FileSize(fileName) == 0);
+	TUtil::FileSystem::Delete(fileName);
 	
 	//test TruncateFile creating non existing files
-	REQUIRE(Empire::FileSystem::TruncateFile("./test/file_that_will_never_exist.dat"));
-	REQUIRE(Empire::FileSystem::Delete("./test/file_that_will_never_exist.dat"));
+	REQUIRE(TUtil::FileSystem::TruncateFile("./test/file_that_will_never_exist.dat"));
+	REQUIRE(TUtil::FileSystem::Delete("./test/file_that_will_never_exist.dat"));
 }
 
 TEST_CASE("FileSystem::CreateFile", "[filesystem]") {
 	char fileName[] = "./test/test.dat";
-	Empire::FileSystem::Delete(fileName);
-	REQUIRE(Empire::FileSystem::CreateFile(fileName));
+	TUtil::FileSystem::Delete(fileName);
+	REQUIRE(TUtil::FileSystem::CreateFile(fileName));
 	FILE* f = fopen(fileName, "wb");
 	REQUIRE(f != nullptr);
 	fclose(f);
@@ -66,18 +66,12 @@ TEST_CASE("FileSystem::MapFile", "[filesystem]") {
 		REQUIRE(f != nullptr);
 		REQUIRE(fwrite(fileName, 1, sizeof(fileName), f) == sizeof(fileName));
 		REQUIRE(fclose(f) == 0);
-		u64 length;
-		Empire::EmpireError EMPIRE_ERROR_VAR1;
-		void* data = Empire::FileSystem::MapFile(fileName, Empire::FileOpenOptions::READ, length EMPIRE_ERROR_VAR, 0, Empire::FileSystem::ENTIRE_FILE);
+		TUtil::FileError error;
+
+		uint64_t length;
+		void* data = TUtil::FileSystem::MapFile(fileName, TUtil::FileOpenOptions::READ, length, &error, 0, TUtil::FileSystem::ENTIRE_FILE);
 		REQUIRE(data != nullptr);
-		REQUIRE(Empire::StringUtils::Equal(fileName, (const char*)data));
-		Empire::FileSystem::UnmapFile(data);
-	}
-	SECTION("Memory map 0 length file") {
-		Empire::FileSystem::CreateFile("./test/empty_file.dat");
-		u64 length;
-		Empire::EmpireError EMPIRE_ERROR_VAR1;
-		REQUIRE_THROWS(Empire::FileSystem::MapFile("./test/empty_file.dat", Empire::FileOpenOptions::READ, length EMPIRE_ERROR_VAR, 0, Empire::FileSystem::ENTIRE_FILE));
-		Empire::FileSystem::Delete("./test/empty_file.dat");
+		REQUIRE(TUtil::StringUtils::Equal(fileName, (const char*)data));
+		TUtil::FileSystem::UnmapFile(data);
 	}
 }

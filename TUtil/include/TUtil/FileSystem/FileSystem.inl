@@ -1,9 +1,10 @@
 #pragma once
-#include "FileSystem.h"
-#include "System.h"
-#include "Hazel/Util/StringUtils.h"
 
-namespace Hazel {
+#include "FileSystem.h"
+#include "TUtil/System.h"
+#include "TUtil/StringUtils.h"
+
+namespace TUtil {
 
 	template<typename F>
 	void FileSystem::PathNameIterator(const char* path, F onPath)
