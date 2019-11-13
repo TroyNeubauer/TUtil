@@ -1,4 +1,5 @@
 #include "TUtil/FileSystem/File.h"
+#include "TUtil/FileSystem.h"
 
 #include <archive.h>
 #include <archive_entry.h>

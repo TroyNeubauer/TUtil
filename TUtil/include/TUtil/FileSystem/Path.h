@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "TUtil/Util/Str.h"
+#include "TUtil/vendor/str/Str.h"
 #include "TUtil/FileSystem/FileEnums.h"
 
 namespace Hazel {

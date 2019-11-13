@@ -1,9 +1,13 @@
 #pragma once
-#include "hzpch.h"
-#include "Hazel/Core.h"
-#include "Hazel/Engine.h"
+#include <functional>
 
-namespace Hazel {
+
+namespace TUtil{
+
+	//Returns time in seconds. The magnitude is not important. All that matters is if calling this
+	//function at different points in time results in a accurate increase
+	extern float GetTime();
+
 	template<typename T>
 	class CachedFunction
 	{
@@ -11,8 +15,8 @@ namespace Hazel {
 		CachedFunction(std::function<T()> func, float secondsPerUpdates) : m_Func(func), m_SecondsBetweenUpdates(secondsPerUpdates) {}
 
 		T Get() {
-			if (m_LastUpdate == -1.0f || (Engine::GetTime() - m_LastUpdate > m_SecondsBetweenUpdates)) {
-				m_LastUpdate = Engine::GetTime();
+			if (m_LastUpdate == -1.0f || (GetTime() - m_LastUpdate > m_SecondsBetweenUpdates)) {
+				m_LastUpdate = GetTime();
 				m_CachedValue = m_Func();
 			}
 			return m_CachedValue;

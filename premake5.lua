@@ -1,31 +1,71 @@
+
+
+function mkdirs(file)
+	local total = "."
+	local path = string.match(file, "(.-)([^/]-([^%.]+))$")
+
+	for part in string.gmatch(path, "([^/]+)") do
+		if part ~= "." then
+			total = total.."/"..part
+			os.mkdir(total)
+		end
+	end
+
+
+end
+
+function copySrcFile(file)
+	local destPath = "./TUtil/src/vendor/"..file
+	mkdirs(destPath)
+
+	print("Copying: "..destPath)
+	os.copyfile("./TUtil/vendor/"..file, destPath)
+end
+
+function copySrcFiles(path)
+	local srcPath = "./TUtil/vendor/"..path
+	local destPath = "./TUtil/src/vendor/"..path
+	mkdirs(destPath)
+
+	--for fname in lfs.dir(srcPath) do
+	--	print("files are: "..fname)
+	--end
+
+	--print("Copying from Folder: "..destPath)
+	os.copyfile(srcPath, destPath)
+end
+
+
+function copyHeaderFile(file)
+	local destPath = "./TUtil/include/TUtil/vendor/"..file
+	mkdirs(destPath)
+
+	print("Copying: "..destPath)
+	os.copyfile("./TUtil/vendor/"..file, destPath)
+
+end
+
+
 workspace "TUtil"
 	architecture "x64"
 	startproject "TUtilTest"
 
 	configurations
 	{
-		"DebugLib",
-		"DebugDLL",
-		"ReleaseLib",
-		"ReleaseDLL",
+		"Debug",
+		"Release",
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["str"] = "TUtil/vendor/ocornut_str"
-IncludeDir["libarchive"] = "TUtil/vendor/libarchive/libarchive"
 
+VendorIncludeDir = "TUtil/include/TUtil/vendor"
 
 project "TUtil"
 	location "TUtil"
-
-	filter "*Lib"
-		kind "StaticLib"
-	filter "*DLL"
-		kind "SharedLib"
-
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on" 
@@ -34,6 +74,7 @@ project "TUtil"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
 
 	files
 	{
@@ -44,7 +85,14 @@ project "TUtil"
 	includedirs
 	{
 		"%{prj.name}/include/",
+		"%{VendorIncludeDir}/str",
+		"%{VendorIncludeDir}/libarchive",
 	}
+
+	print "Copying dependent files..."
+	copyHeaderFile("str/Str.h")
+	copySrcFile("str/Str.cpp")
+	--copySrcFiles("libarchive/libarchive")
 
 	links 
 	{ 
@@ -85,7 +133,6 @@ project "Test"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-		""
 
 	}
 
@@ -113,4 +160,5 @@ project "Test"
 		runtime "Release"
 		optimize "speed"
 		inlining "auto"
+
 

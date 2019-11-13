@@ -152,9 +152,7 @@ public:
 
     inline char&        operator[](size_t i)                    { return Data[i]; }
     inline char         operator[](size_t i) const              { return Data[i]; }
-
-	explicit operator const char*() const{ return Data; }
-	operator char* () const { return Data; }
+    //explicit operator const char*() const{ return Data; }
 
     inline Str();
     inline Str(const char* rhs);
