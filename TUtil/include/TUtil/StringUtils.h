@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Str.h>
+#include <TUtil/vendor/str/Str.h>
+
 #include <cstring>
 #include <cwchar>
 
