@@ -101,7 +101,9 @@ project "TUtil"
 
 	defines
 	{
+		"LIBARCHIVE_STATIC",
 	}
+
 	filter "system:windows"
 		links
 		{
