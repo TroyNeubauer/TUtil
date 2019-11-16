@@ -11,6 +11,7 @@
 #include <psapi.h>
 #include <TCHAR.h>
 #include <pdh.h>
+#include <conio.h>
 
 namespace TUtil {
 
@@ -45,6 +46,10 @@ namespace TUtil {
 		GetProcessTimes(self, &ftime, &ftime, &fsys, &fuser);
 		memcpy(&lastSysCPU, &fsys, sizeof(FILETIME));
 		memcpy(&lastUserCPU, &fuser, sizeof(FILETIME));
+	}
+
+	bool System::KBHit() {
+		return _kbhit();
 	}
 
 	void GetMemInfo(MEMORYSTATUSEX* memInfo)

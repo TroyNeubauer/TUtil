@@ -56,20 +56,24 @@
 #endif
 
 
-#ifdef T_DEBUG
-	// debugbreak
-	#if defined T_PLATFORM_WINDOWS
+#ifdef DEBUG
+	// debug break
+	#if defined(T_PLATFORM_WINDOWS)
 		#define T_DEBUGBREAK() __debugbreak()
-	#elif defined T_PLATFORM_LINUX
+	#elif defined(T_PLATFORM_LINUX)
 		#include <signal.h>
 		#define T_DEBUGBREAK() raise(SIGTRAP)
+
 	#else
 		#error No debug break!
 	#endif
 
 		#define T_ERROR(format, ...) fprintf(stderr, format, __VA_ARGS__); fprintf(stderr, "\n"); T_DEBUGBREAK();
+
 		#define T_ASSERT(value, message, ...) if (!value) { fprintf(stderr, "Assertion failed!: "); T_ERROR(message, __VA_ARGS__); }
 
-
+#else
+	#define T_ERROR(format, ...)
+	#define T_ASSERT(value, message, ...)
 
 #endif

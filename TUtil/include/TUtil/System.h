@@ -32,6 +32,8 @@ namespace TUtil {
 
 		static uint32_t GetProcessorCount();
 		
+		//Returns true if a key press within the command line connected to this process is detected
+		static bool KBHit();
 	
 		static uint64_t PageSize();
 		static uint64_t AllocationGranularity();
