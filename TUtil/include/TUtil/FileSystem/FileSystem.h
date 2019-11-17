@@ -1,13 +1,14 @@
 #pragma once
 
+#include "TUtil/Core.h"
 #include "TUtil/StringUtils.h"
+#include "FileEnums.h"
 
 #include <functional>
 #include <utility>
 
 #include <stdint.h>
 
-#include "FileEnums.h"
 
 #ifdef T_PLATFORM_WINDOWS
 	#undef CreateFile

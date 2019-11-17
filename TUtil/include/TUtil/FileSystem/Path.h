@@ -39,8 +39,8 @@ namespace TUtil {
 		bool CreateFile();
 		bool CreateDirectory();
 	
-		//COpies the absloute path of this file into buf and returns buf
-		const char* AbsloutePath(char* buf, size_t bufLength);
+		//Copies the absloute path of this file into buf and returns buf
+		const char* AbsloutePath(char* buf, uint32_t bufLength);
 
 		//Returns a new path that has the given name and this path as the parent. This assumes that this path is a directory. 
 		//If this path represents an existing file and the platform doesnt support a directory and a file with the same name, 
@@ -54,10 +54,12 @@ namespace TUtil {
 		void UpdatePath();
 
 	public:
-		static const Path Invalid;
+		static const Path INVALID;
+
+		using Buf = Str128;
 
 	private:
-		Str128 m_Path;
+		Buf m_Path;
 		bool m_InArchive;
 
 		friend class File;

@@ -84,6 +84,37 @@ namespace TUtil {
 			}
 		}
 
+		static uint32_t IndexOf(const char* string, char target)
+		{
+			uint32_t result = -1;
+			char c;
+			uint32_t i = 0;
+			while ((c = string[i]) != '\0')
+			{
+				if (c == target)
+				{
+					result = i;
+					break;
+				}
+				i++;
+			}
+			return result;
+		}
+
+		static uint32_t LastIndexOf(const char* string, char target)
+		{
+			uint32_t result = -1;
+			char c;
+			uint32_t i = 0;
+			while ((c = string[i]) != '\0')
+			{
+				if (c == target)
+					result = i;
+				i++;
+			}
+			return result;
+		}
+
 		//Advances string to the null termination character or to the first character of the matched target
 		//string will be modified to be an empty string if the target is not found
 		//Find("Fast string finding is fun", "is") -> "is fun"
