@@ -1,4 +1,5 @@
 # Directories
+TUtil/src/vendor/
 
 **/bin/
 !vendor/bin/
