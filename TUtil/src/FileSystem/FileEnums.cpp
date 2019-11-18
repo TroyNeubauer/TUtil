@@ -6,13 +6,12 @@ namespace TUtil {
 	static const int s_ErrorNamesLength = sizeof(fileErrorNames) / sizeof(const char*);
 
 
-	inline const char* FileErrorToString(FileError error)
+	const char* FileErrorToString(FileError error)
 	{
 		if ((uint64_t) error >= s_ErrorNamesLength)
 			return "Invalid Error! Out of bounds";
 		else
 			return fileErrorNames[(uint64_t) error];
 	}
-
 
 }
