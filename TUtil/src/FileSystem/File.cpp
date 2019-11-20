@@ -2,8 +2,8 @@
 #include "TUtil/FileSystem.h"
 #include "TUtil/Core.h"
 
-#include <archive.h>
-#include <archive_entry.h>
+//#include <archive.h>
+//#include <archive_entry.h>
 
 namespace TUtil {
 
@@ -61,7 +61,7 @@ namespace TUtil {
 				}
 				result = new ArchivedFile(parent, p_Path, p_Options, p_Error);
 			}
-			T_ASSERT(false, "Unable to find seperation between archive file and internal file!");
+			T_ASSERT(false, "Unable to find separation between archive file and internal file!");
 			return result;
 		}
 		else
@@ -74,6 +74,7 @@ namespace TUtil {
 	ArchivedFile::ArchivedFile(File* parent, const Path& path, FileOpenOptions options, FileError* error)
 		: File(path, options), m_Parent(parent)
 	{
+/*
 		archive_entry* entry;
 		archive* a = archive_read_new();
 		archive_read_support_filter_all(a);
@@ -111,6 +112,9 @@ namespace TUtil {
 			*error = FileError::UNKNOWN;
 		}
 		r = archive_read_free(a);
+
+		*/
+		*error = FileError::FILE_NOT_FOUND;
 	}
 
 	void ArchivedFile::Save()

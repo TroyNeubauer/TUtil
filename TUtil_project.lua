@@ -80,6 +80,12 @@ project "TUtil"
 		"%{prj.name}/include/**.h",
 	}
 
+	filter "system:windows"
+		excludes "%{prj.name}/src/Platform/Unix"
+
+	filter "system:linux"
+		excludes "%{prj.name}/src/Platform/Windows"
+	
 	includedirs
 	{
 		"%{prj.name}/include/",

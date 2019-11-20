@@ -1,5 +1,5 @@
-
-#ifdef T_PLATFORM_UNIX
+#include "TUtil/Core.h"
+#if 0
 
 
 #include <sys/types.h>
@@ -11,12 +11,10 @@
 #include <string.h>
 
 #include "TUtil/FileSystem.h"
-#include "Platform/System/FileTrackerFunctions.h"
 
 namespace TUtil {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
-	File::File(const char* path, bool sequential, FileError* error) : m_Path(path)
+
+	File::File(const Path& path, FileOpenOptions options) : m_Path(path)
 	{
 		uint64_t pageSize = System::PageSize();
 		m_FileHandle = open(path, O_RDONLY);
@@ -25,11 +23,6 @@ namespace TUtil {
 			*error = FileError::FILE_NOT_FOUND;
 			return;
 		}
-#ifdef HZ_DEBUG
-		Log_fopen((FILE*) m_FileHandle, path, "rb", __FILE__, __LINE__);
-#elif HZ_RELEASE
-		Log_fopen((FILE*) m_FileHandle, path);
-#endif
 		struct stat stats;
 		if(fstat(m_FileHandle, &stats) == -1)
 		{
@@ -86,15 +79,9 @@ namespace TUtil {
 				m_Data = newData;//Give the user access to the file
 			}
 		}
-#ifdef HZ_DEBUG
-			Log_fclose((FILE*) m_FileHandle, 0, __FILE__, __LINE__);
-#elif HZ_RELEASE
-			Log_fclose((FILE*) m_FileHandle, 0);
-#endif
 		close(m_FileHandle);
 		m_FileHandle = 0;
 	}
-#pragma GCC diagnostic pop
 
 	File::File(File&& other)
 	{

@@ -1,7 +1,8 @@
+#include "TUtil/Core.h"
 #ifdef T_PLATFORM_UNIX
 
-#include "Hazel/System/Timer.h"
-#include "Hazel/System/System.h"
+#include "TUtil/Timer.h"
+#include "TUtil/System.h"
 
 namespace TUtil {
 	Timer::Timer()

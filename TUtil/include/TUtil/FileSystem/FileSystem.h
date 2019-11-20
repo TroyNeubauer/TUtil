@@ -26,7 +26,7 @@ namespace TUtil {
 		static const uint64_t ENTIRE_FILE = (uint64_t) -1, INVALID_FILE = (uint64_t) -1;
 		//Maps a section of a file into virtual memory
 		//This function returns the pointer to the memory and the length of the file
-		static void* MapFile(const char* file, FileOpenOptions options, uint64_t& fileLength, FileError* error, uint64_t offset = 0, uint64_t bytes = ENTIRE_FILE);
+		static void* MapFile(const char* file, FileOpenOptions options, uint64_t& fileLength, FileError* error, uint64_t bytes = ENTIRE_FILE, uint64_t offset = 0);
 		static void UnmapFile(void* file);
 
 		//The following functions return true if their operation succeeded and false otherwise.

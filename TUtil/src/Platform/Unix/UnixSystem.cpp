@@ -1,7 +1,7 @@
+#include "TUtil/Core.h"
 #ifdef T_PLATFORM_UNIX
 
-#include "Hazel/System/System.h"
-#include "Hazel/Log.h"
+#include "TUtil/System.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -10,7 +10,9 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <time.h>
+#include <termios.h>
+#include <sys/ioctl.h>
 
 namespace TUtil {
 	

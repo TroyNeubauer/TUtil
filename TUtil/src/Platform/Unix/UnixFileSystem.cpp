@@ -1,33 +1,63 @@
+#include "TUtil/Core.h"
 #ifdef T_PLATFORM_UNIX
 
 #include "TUtil/FileSystem.h"
-#include "TUtil/Util/Timer.h"
+#include "TUtil/Timer.h"
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+
+#include <fcntl.h>
+#include <unistd.h>
+
 
 namespace TUtil {
 
 	bool FileSystem::Exists(const char* path)
 	{
-		return false;
+		return access(path, F_OK);
 	}
 
 	uint64_t FileSystem::FileSize(const char* path)
 	{
-		return 0;
+		struct stat64 data;
+		int result = stat64(path, &data);
+		if (result == -1)
+		{//Error
+			return INVALID_FILE;
+		}
+		return data.st_size;
 	}
 
 	bool FileSystem::PathsEqual(const char* a, const char* b)
 	{
-		return false;
+		return StringUtils::Equal(a, b);//Provide Better implementation later
 	}
 
 	bool FileSystem::IsDirectory(const char* path)
 	{
-		return false;
+		struct stat64 data;
+		int result = stat64(path, &data);
+		if (result == -1)
+		{//Error
+			return false;
+		}
+		return data.st_mode & S_IFDIR;
 	}
 
 	bool FileSystem::CreateFile(const char* path)
 	{
-		return true;
+		int fd = open(path, O_CREAT);
+		if (fd != -1)// Success
+		{
+			close(fd);
+			return true;
+		}
+		else//Error
+		{
+			return false;
+		}
 	}
 
 	bool FileSystem::CreateFileWithParents(const char* path)
@@ -37,17 +67,38 @@ namespace TUtil {
 
 	bool FileSystem::CreateDirectory(const char* path)
 	{
-		return false;
+		int result = mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
+		if (result == 0)
+		{//Error
+			return true;
+		}
+		else
+		{
+			if (errno == EEXIST)
+				return true;
+			else
+				return false;
+		}
 	}
 
 	bool FileSystem::CreateDirectories(const char* path)
 	{
+
 		return true;
 	}
 
 	bool FileSystem::TruncateFile(const char* path)
 	{
-		return true;
+		int fd = open(path, O_CREAT | O_TRUNC | O_WRONLY);
+		if (fd != -1)// Success
+		{
+			close(fd);
+			return true;
+		}
+		else//Error
+		{
+			return false;
+		}
 	}
 
 	void FileSystem::AbsloutePath(const char* file, char* buf, uint32_t bufLength)
@@ -56,13 +107,44 @@ namespace TUtil {
 
 	bool FileSystem::Delete(const char* path)
 	{
+		if (Exists(path))
+		{
+			if (IsDirectory(path))
+			{
+				//TODO: Delete files in dir if there are any
+				return rmdir(path) == 0;
+			}
+			else
+			{
+				return unlink(path) == 0;
+			}
+		}
 		return false;
 	}
 
 
 	//Use of p_ to denote parameters from local vars in this long function
-	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, uint64_t& p_FileLength, FileError* p_Error, uint64_t p_Offset, uint64_t p_Bytes)
+	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, uint64_t& p_FileLength, FileError* p_Error, uint64_t p_Bytes, uint64_t p_Offset)
 	{
+		uint64_t realLength = FileSystem::FileSize(p_File);
+		if (realLength == INVALID_FILE)
+			return nullptr;
+
+		p_FileLength = realLength;
+		if (p_Bytes == ENTIRE_FILE)
+		{
+			p_Bytes = realLength;
+		}
+		int flags = 0;
+		if ((p_Options & FileOpenOptions::READ) && (p_Options & FileOpenOptions::WRITE))
+			flags |= O_RDWR;
+		else if (p_Options & FileOpenOptions::READ)
+			flags |= O_RDONLY;
+		else if (p_Options & FileOpenOptions::WRITE)
+			flags |= O_WRONLY;
+
+		int fd = open(p_File, flags);
+		void* result = mmap(nullptr, p_Bytes, PROT_READ, MAP_PRIVATE, fd, p_Offset);
 		return nullptr;
 	}
 
@@ -70,45 +152,6 @@ namespace TUtil {
 	{
 
 	}
-
-	/*File::File(File&& other) : m_Path(other.GetPath())
-	{
-		other.m_Length = this->m_Length;
-		other.m_FileHandle = this->m_FileHandle;
-		other.m_Data = this->m_Data;
-		other.m_FreeData = this->m_FreeData;
-
-		this->m_FileHandle = INVALID_FILE_HANDLE;
-		this->m_Data = nullptr;
-	}
-
-	File::~File()
-	{
-		if (!m_CompletedDeInit)
-		{
-			m_CompletedDeInit = true;
-#ifdef HZ_DEBUG
-			Log_fclose((FILE*)m_FileHandle, 0, __FILE__, __LINE__);
-#elif HZ_RELEASE
-			Log_fclose((FILE*)m_FileHandle, 0);
-#endif
-			if (m_FreeData)
-			{	//In this case m_Data is the block we malloc'ed
-				//We only need to free m_Data because the file handle and view were destroyed in the constructor
-				free(m_Data);
-			}
-			else
-			{
-				CloseHandle(m_FileHandle);
-				UnmapViewOfFile(m_Data);
-				if (m_OtherPage)//We allocated another page to get space for the null byte
-				{
-					VirtualFree(m_OtherPage, 0, MEM_RELEASE);
-				}
-			}
-		}
-
-	}*/
 
 }
 #endif
