@@ -15,5 +15,4 @@ namespace TUtil {
 			return fileErrorNames[(uint64_t) error];
 	}
 
-
 }
