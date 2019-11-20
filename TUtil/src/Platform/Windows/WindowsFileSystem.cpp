@@ -11,8 +11,6 @@ namespace TUtil {
 	static thread_local wchar_t winUTF16Buf[1024];
 	static thread_local char winUTF8Buf[1024];
 
-
-
 	static wchar_t* ToUTF16(const char* text, wchar_t* dest, int bytes)
 	{
 		int result = MultiByteToWideChar(CP_UTF8, 0, text, -1, dest, bytes / sizeof(wchar_t));
@@ -151,7 +149,7 @@ namespace TUtil {
 
 
 	//Use of p_ to denote parameters from local vars in this long function
-	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, uint64_t& p_FileLength, FileError* p_Error, uint64_t p_Offset, uint64_t p_Bytes)
+	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, uint64_t& p_FileLength, FileError* p_Error, uint64_t p_Bytes, uint64_t p_Offset)
 	{
 		if (p_Bytes == ENTIRE_FILE)
 		{
