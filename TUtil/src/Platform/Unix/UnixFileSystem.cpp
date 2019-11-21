@@ -16,7 +16,7 @@ namespace TUtil {
 
 	bool FileSystem::Exists(const char* path)
 	{
-		return access(path, F_OK);
+		return access(path, R_OK);
 	}
 
 	uint64_t FileSystem::FileSize(const char* path)
