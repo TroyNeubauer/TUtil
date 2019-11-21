@@ -128,7 +128,10 @@ namespace TUtil {
 	{
 		uint64_t realLength = FileSystem::FileSize(p_File);
 		if (realLength == INVALID_FILE)
+		{
+			*p_Error = FileError::FILE_NOT_FOUND;
 			return nullptr;
+		}
 
 		p_FileLength = realLength;
 		if (p_Bytes == ENTIRE_FILE)
@@ -144,8 +147,16 @@ namespace TUtil {
 			flags |= O_WRONLY;
 
 		int fd = open(p_File, flags);
+		if (fd == 0)
+		{
+			*p_Error = FileError::FILE_NOT_FOUND;
+		}
 		void* result = mmap(nullptr, p_Bytes, PROT_READ, MAP_PRIVATE, fd, p_Offset);
-		return nullptr;
+		if (result == nullptr)
+		{
+			*p_Error = FileError::FILE_NOT_FOUND;
+		}
+		return result;
 	}
 
 	void FileSystem::UnmapFile(void* file)
