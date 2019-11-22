@@ -8,59 +8,42 @@
 namespace TUtil {
 
 	//A nicer looking api for C-strings
+	//Unless otherwise specified, all methods in this class will accecpt null pointers properly
 	class StringUtils
 	{
 	public:
-		inline static bool Equal(const char* a, const char* b) { return std::strcmp(a, b) == 0; }
-		inline static bool Equal(const wchar_t* a, const wchar_t* b) { return std::wcscmp(a, b) == 0; }
-		inline static bool Contains(const char* string, const char* part) { return std::strstr(string, part) != NULL; }
+		//Two nullptrs are not equal to each other
+		//The empty string ("") is always equal to itself
+		static bool Equal(const char* a, const char* b);
+		static bool Equal(const wchar_t* a, const wchar_t* b);
+		//The empty string always contains itself
+		static bool Contains(const char* string, const char* target);
 		
-		inline static bool EndsWith(const char* string, const char* part) { return EndsWith(string, string + Length(string), part, part + Length(part)); }
-		static constexpr bool EndsWith(const char* string, const char* stringEnd, const char* part, const char* partEnd);
+		//Calling EndsWith(x, ""); will always return false for any value of x
+		static constexpr bool EndsWith(const char* string, const char* target) { return EndsWith(string, string + Length(string), target, target + Length(target)); }
+		static constexpr bool EndsWith(const char* string, const char* stringEnd, const char* target, const char* targetEnd);
 
-		inline static bool StartsWith(const char* string, const char* target)
-		{
-			
-			if (*target == 0x00) return false;
-			while (*string != 0x00)
-			{
-				
-				if (*string == *target)
-				{
-					string++;
-					target++;
-					if (*target == 0x00) return true;//We have hit the end of target with all the characters matching!
-				}
-				else
-					return false;
-			}
-			return false;
-		}
+		static inline bool EndsWithNConstexpr(const char* string, const char* target) {return EndsWithNConstexpr(string, string + Length(string), target, target + Length(target)); }
+		static bool EndsWithNConstexpr(const char* string, const char* stringEnd, const char* target, const char* targetEnd);
+
+		static constexpr bool StartsWith(const char* string, const char* target);
 
 		static constexpr size_t Length(const char* string);
-		inline static size_t Capacity(const char* string) { return Length(string) + 1; }
+		static constexpr size_t Length(const char* string, const char* stringEnd) { return stringEnd - string; }
+		static inline constexpr size_t Capacity(const char* string) { return Length(string) + 1; }
 
 		//inline static void Copy(char* dest, const char* source) { std::strcpy(dest, source); }
 
 		template<class none = void>
-		constexpr static bool ContainsAny(const char* string, const char* first)
-		{
-			return Contains(string, first);
-		}
+		constexpr static bool ContainsAny(const char* string, const char* first) { return Contains(string, first); }
 
 		template<class ... Types>
-		static bool ContainsAny(const char* string, const char* first, Types... args)
-		{
-			return Contains(string, first) || ContainsAny(string, args...);
-		}
+		static bool ContainsAny(const char* string, const char* first, Types... args) { return Contains(string, first) || ContainsAny(string, args...); }
 
 		//Advances the pointer until end returns true for the current character.
 		template<typename T, typename F>//Template to allow for both const char* and char*
-		inline static void Until(T*& string, F end)
-		{
-			while (*string && !end(*string))
-				string++;
-		}
+		static void Until(T*& string, F end);
+
 		template<typename T>
 		inline static void FirstOf(T*& string, char target) { Until(string, [target](char current) { return current == target; }); }
 		template<typename T>
@@ -76,98 +59,24 @@ namespace TUtil {
 		//string will be modified to be an empty string if the target is not found
 		//Find("Fast string finding is fun", "is") -> " fun"
 		template<typename T>
-		static void Find(T*& string, const char* target)
-		{
-			const char* targetStart = target;
-			while (*string && *target)
-			{
-				if (*string == *target) target++;//Advance. If we reach the end of the string target[0] will be null and we will return
-				else target = targetStart;
-				string++;
-			}
-		}
+		static void Find(T*& string, const char* target);
 
-		static uint32_t IndexOf(const char* string, char target)
-		{
-			uint32_t result = -1;
-			char c;
-			uint32_t i = 0;
-			while ((c = string[i]) != '\0')
-			{
-				if (c == target)
-				{
-					result = i;
-					break;
-				}
-				i++;
-			}
-			return result;
-		}
+		static constexpr size_t IndexOf(const char* string, char target);
 
-		static uint32_t LastIndexOf(const char* string, char target)
-		{
-			uint32_t result = -1;
-			char c;
-			uint32_t i = 0;
-			while ((c = string[i]) != '\0')
-			{
-				if (c == target)
-					result = i;
-				i++;
-			}
-			return result;
-		}
+		static constexpr inline size_t LastIndexOf(const char* string, char target) { return LastIndexOf(string, string + Length(string), target); }
+		static constexpr size_t LastIndexOf(const char* string, const char* stringEnd, char target);
 
 		//Advances string to the null termination character or to the first character of the matched target
 		//string will be modified to be an empty string if the target is not found
 		//Find("Fast string finding is fun", "is") -> "is fun"
 		template<typename T>
-		static T* FindBegin(T*& string, const char* target)
-		{
-			if (*string == 0x00 || *target == 0x00) return string;
-			const char* targetStart = target;
-			T* start;//Guaranteed to be assigned the first time a character is matched
-			while (*string)
-			{
-				if (*string == *target) {//A character matches
-					if (target == targetStart)//We are starting the beginning of a new match so save the place in the string
-						start = string;
-					target++;
-					if (*target == 0x00)//We matched the entire target
-					{
-						T* end = string;
-						string = start;//Reset string to point to the start of the target
-						return end + 1;
-					}
-				}
-				else
-				{
-					target = targetStart;//Bring back target since we lost the old one
-				}
-				string++;
-			}
-			return string;
-		}
-		template<typename T>
-		static void NextLine(T*& string)
-		{
-			char endingChar = 0x00;
-			Until(string, [&endingChar](char current)
-			{
-				if (current == '\r' || current == '\n')
-				{
-					endingChar = current;
-					return true;
-				}
-				else
-					return false;
-			});//Continue until we find a newline
-			string++;//Skip the first endline character
+		static T* FindBegin(T*& string, const char* target);
 
-			//If \r\n is used we need to consume the \n
-			if (endingChar == '\r' && *string == '\n')
-				string++;
-		}
+		template<typename T>
+		static void NextLine(T*& string);
 
 	};
 }
+
+
+#include "StringUtils.inl"

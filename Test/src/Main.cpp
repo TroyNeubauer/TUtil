@@ -12,4 +12,7 @@ int main(int argc, char* const argv[]) {
 
 
 #include "FileSystemTest.h"
+#include "BufferTest.h"
+#include "StringUtilsTest.h"
+
 

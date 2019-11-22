@@ -22,8 +22,11 @@ namespace TUtil {
 	{
 		if (*path == 0x00)
 			return;//Return for empty strings
+		if (path[0] == '.' && IsSlash(path[1]))
+			path += 2;
 		if (IsSlash(*path))
 			path++;
+		char* origionalStart = path;
 		char* start = path;//Skip the first slash and have start point to the first char of this file/dir name
 		char* end = path;//Begin searching for the end starting at the first character of this file/dir name
 		while (*end)
@@ -34,7 +37,8 @@ namespace TUtil {
 			{
 				char origional = *end;//Put in a temporary null byte so they we dont have to copy it
 				*end = 0x00;
-				if (onPath(start, origional ? (end + 1) : end)) {
+				if (onPath(start, origionalStart, origional ? (end + 1) : end))
+				{
 					*end = origional;
 					return;
 				}
@@ -43,7 +47,7 @@ namespace TUtil {
 			start = ++end;//Have the next start be the char after this trailing slash
 		}
 		if (start != end)
-			onPath(start, end);
+			onPath(start, origionalStart, end);
 	}
 
 }

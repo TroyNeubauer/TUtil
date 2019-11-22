@@ -39,7 +39,7 @@ namespace TUtil {
 	{
 		bool isLastArchive = false;
 		m_InArchive = false;
-		FileSystem::PathNameIterator(m_Path.c_str(), [this, &isLastArchive](const char* fileName, const char* rest) -> bool {
+		FileSystem::PathNameIterator(m_Path.c_str(), [this, &isLastArchive](const char* fileName, const char* total, const char* rest) -> bool {
 			if (isLastArchive)
 			{
 				m_InArchive = true;

@@ -81,12 +81,6 @@ namespace TUtil {
 		}
 	}
 
-	bool FileSystem::CreateDirectories(const char* path)
-	{
-
-		return true;
-	}
-
 	bool FileSystem::TruncateFile(const char* path)
 	{
 		int fd = open(path, O_CREAT | O_TRUNC | O_WRONLY);

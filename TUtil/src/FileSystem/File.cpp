@@ -22,7 +22,7 @@ namespace TUtil {
 		if (p_Path.m_InArchive)
 		{
 			char* end = nullptr;
-			FileSystem::PathNameIterator(p_Path, [&end](char* fileName, char* rest) -> bool {
+			FileSystem::PathNameIterator(p_Path, [&end](const char* fileName, const char* total, char* rest) -> bool {
 				
 				if (FileSystem::HasArchiveExtension(fileName))
 				{
@@ -42,7 +42,7 @@ namespace TUtil {
 			while (end && *end)
 			{
 				char* start = end;
-				FileSystem::PathNameIterator(end, [&end](char* fileName, char* rest) -> bool {
+				FileSystem::PathNameIterator(end, [&end](const char* fileName, const char* total, char* rest) -> bool {
 
 					if (FileSystem::HasArchiveExtension(fileName))
 					{

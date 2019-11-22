@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -69,7 +71,7 @@ TEST_CASE("FileSystem::MapFile", "[filesystem]") {
 		TUtil::FileError error;
 
 		uint64_t length;
-		void* data = TUtil::FileSystem::MapFile(fileName, TUtil::FileOpenOptions::READ, length, &error, 0, TUtil::FileSystem::ENTIRE_FILE);
+		void* data = TUtil::FileSystem::MapFile(fileName, TUtil::FileOpenOptions::READ, length, &error);
 		REQUIRE(data != nullptr);
 		REQUIRE(TUtil::StringUtils::Equal(fileName, (const char*)data));
 		TUtil::FileSystem::UnmapFile(data);

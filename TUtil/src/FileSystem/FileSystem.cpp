@@ -1,10 +1,10 @@
 
-#include "TUtil/FileSystem/FileSystem.h"
 #include "TUtil/FileSystem/Path.h"
 #include "TUtil/Timer.h"
 #include "TUtil/StringUtils.h"
 
 #include <stdint.h>
+#include "TUtil/FileSystem/FileSystem.h"
 
 namespace TUtil {
 
@@ -76,6 +76,14 @@ namespace TUtil {
 				lastDot = fileName;
 		}
 		return StringUtils::Equal(lastDot, extension);
+	}
+
+	bool FileSystem::CreateDirectories(const char* path)
+	{
+		FileSystem::PathNameIterator(path, [](const char* fileName, const char* total, const char* rest) -> bool {
+			return !FileSystem::CreateDirectory(total);
+		});
+		return FileSystem::Exists(path);
 	}
 
 }

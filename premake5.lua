@@ -105,10 +105,7 @@ project "TUtil"
 	}
 
 	filter "system:windows"
-		links
-		{
-
-		}
+		defines "_CRT_SECURE_NO_WARNINGS"
 
 	filter "configurations:Debug"
 		defines "T_DEBUG"
@@ -163,6 +160,7 @@ project "Test"
 	}
 
 	filter "system:windows"
+		defines "_CRT_SECURE_NO_WARNINGS"
 		links
 		{
 			"Pdh.lib",
