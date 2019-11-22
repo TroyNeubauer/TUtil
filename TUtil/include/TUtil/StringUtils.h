@@ -14,6 +14,9 @@ namespace TUtil {
 		inline static bool Equal(const char* a, const char* b) { return std::strcmp(a, b) == 0; }
 		inline static bool Equal(const wchar_t* a, const wchar_t* b) { return std::wcscmp(a, b) == 0; }
 		inline static bool Contains(const char* string, const char* part) { return std::strstr(string, part) != NULL; }
+		
+		inline static bool EndsWith(const char* string, const char* part) { return EndsWith(string, string + Length(string), part, part + Length(part)); }
+		static constexpr bool EndsWith(const char* string, const char* stringEnd, const char* part, const char* partEnd);
 
 		inline static bool StartsWith(const char* string, const char* target)
 		{
@@ -34,7 +37,7 @@ namespace TUtil {
 			return false;
 		}
 
-		inline static size_t Length(const char* string) { return std::strlen(string); }
+		static constexpr size_t Length(const char* string);
 		inline static size_t Capacity(const char* string) { return Length(string) + 1; }
 
 		//inline static void Copy(char* dest, const char* source) { std::strcpy(dest, source); }
