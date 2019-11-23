@@ -19,11 +19,17 @@ namespace TUtil {
 
 		inline size_t Length(const char* string, const char* stringEnd) { return stringEnd - string; }
 		size_t Length(const char* string);
-		inline size_t Capacity(const char* string) { return Length(string) + 1; }
+
+		//Returns the capacity needed to store a string. Since nullptr is not a valid string
+		//This method return 0 for Capacity(nullptr)
+		inline size_t Capacity(const char* string) { return string ? (Length(string) + 1) : 0; }
+
+		//Both EndsWith(x, "") and StartsWith(x, "") return false for any value of x because
+		//a string cannot contain another string that is empty
+		bool StartsWith(const char* string, const char* target);
 
 		bool EndsWith(const char* string, const char* stringEnd, const char* target, const char* targetEnd);
 		inline bool EndsWith(const char* string, const char* target) { return EndsWith(string, string + Length(string), target, target + Length(target)); }
-		bool StartsWith(const char* string, const char* target);
 
 		int64_t IndexOf(const char* string, char target);
 
@@ -38,7 +44,7 @@ namespace TUtil {
 
 			constexpr size_t Length(const char* string, const char* stringEnd) { return stringEnd - string; }
 			constexpr size_t Length(const char* string);
-			constexpr inline size_t Capacity(const char* string) { return Length(string) + 1; }
+			constexpr inline size_t Capacity(const char* string) { return string ? (Length(string) + 1) : 0; }
 
 			constexpr bool EndsWith(const char* string, const char* stringEnd, const char* target, const char* targetEnd);
 			constexpr bool EndsWith(const char* string, const char* target) { return EndsWith(string, string + Length(string), target, target + Length(target)); }
@@ -50,11 +56,6 @@ namespace TUtil {
 			constexpr int64_t LastIndexOf(const char* string, const char* stringEnd, char target);
 			constexpr inline int64_t LastIndexOf(const char* string, char target) { return LastIndexOf(string, string + Length(string), target); }
 
-			template<class none = void>
-			constexpr inline bool ContainsAny(const char* string, const char* first) { return Contains(string, first); }
-
-			template<class ... Types>
-			constexpr bool inline ContainsAny(const char* string, const char* first, Types... args) { return Contains(string, first) || ContainsAny(string, args...); }
 		}
 
 		template<class none = void>
@@ -69,11 +70,13 @@ namespace TUtil {
 
 		template<typename T>
 		void FirstOf(T*& string, char target) { Until(string, [target](char current) { return current == target; }); }
+
 		template<typename T>
 		void FirstOf(T*& string, char a, char b) { Until(string, [a, b](char current) { return current == a || current == b; }); }
 
 		template<typename T>
 		void FirstNotOf(T*& string, char target) { Until(string, [target](char current) { return current != target; }); }
+
 		template<typename T>
 		void FirstNotOf(T*& string, char a, char b) { Until(string, [a, b](char current) { return current != a || current != b; }); }
 
