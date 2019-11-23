@@ -34,7 +34,6 @@ namespace TUtil {
 			return std::strstr(string, part) != NULL;
 		}
 
-
 		int64_t LastIndexOf(const char* string, const char* stringEnd, char target)
 		{
 			if (string == nullptr)
@@ -59,6 +58,39 @@ namespace TUtil {
 					return false;
 			}
 			return true;
+		}
+
+		bool StartsWith(const char* string, const char* target)
+		{
+			if (string == nullptr || target == nullptr)
+				return false;
+			char s, t;
+			while ((t = *target))
+			{
+				if (t == 0x00)//The string is shorter than the target
+					return false;
+				s = *string;
+				if (t != s)//They differ
+					return false;
+				target++;
+				string++;
+			}
+			return true;//We made it to the end of target and every character matched
+		}
+
+		int64_t IndexOf(const char* string, char target)
+		{
+			if (string == nullptr)
+				return -1;
+			char c;
+			uint64_t i = 0;
+			while (c = string[i])
+			{
+				if (c == target)
+					return i;
+				i++;
+			}
+			return -1;
 		}
 	}
 }
