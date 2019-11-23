@@ -1,8 +1,10 @@
 #include "TUtil/Core.h"
 #ifdef T_PLATFORM_UNIX
 
-#include "TUtil/FileSystem.h"
 #include "TUtil/Timer.h"
+#include "TUtil/FileSystem/FileSystem.h"
+#include "TUtil/FileSystem/FileEnums.h"
+#include "TUtil/FileSystem/Path.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -11,12 +13,15 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <unordered_map>
+
 
 namespace TUtil {
 
 	bool FileSystem::Exists(const char* path)
 	{
-		return access(path, R_OK);
+		struct stat64 data;
+		return stat64(path, &data) == 0;
 	}
 
 	uint64_t FileSystem::FileSize(const char* path)
@@ -48,7 +53,7 @@ namespace TUtil {
 
 	bool FileSystem::CreateFile(const char* path)
 	{
-		int fd = open(path, O_CREAT);
+		int fd = open(path, O_CREAT, 0777);
 		if (fd != -1)// Success
 		{
 			close(fd);
@@ -60,10 +65,6 @@ namespace TUtil {
 		}
 	}
 
-	bool FileSystem::CreateFileWithParents(const char* path)
-	{
-		return true;
-	}
 
 	bool FileSystem::CreateDirectory(const char* path)
 	{
@@ -83,7 +84,7 @@ namespace TUtil {
 
 	bool FileSystem::TruncateFile(const char* path)
 	{
-		int fd = open(path, O_CREAT | O_TRUNC | O_WRONLY);
+		int fd = open(path, O_TRUNC | O_WRONLY);
 		if (fd != -1)// Success
 		{
 			close(fd);
@@ -91,7 +92,17 @@ namespace TUtil {
 		}
 		else//Error
 		{
-			return false;
+			fd = open(path, O_CREAT | O_WRONLY, 0777);
+			if (fd != -1)// Success
+			{
+				close(fd);
+				return true;
+			}
+			else//Error
+			{
+				fprintf(stderr, "Failed to open file %s, Error: %i", path, errno);
+				return false;
+			}
 		}
 	}
 
@@ -101,36 +112,25 @@ namespace TUtil {
 
 	bool FileSystem::Delete(const char* path)
 	{
-		if (Exists(path))
-		{
-			if (IsDirectory(path))
-			{
-				//TODO: Delete files in dir if there are any
-				return rmdir(path) == 0;
-			}
-			else
-			{
-				return unlink(path) == 0;
-			}
-		}
-		return false;
+		return remove(path) == 0;
 	}
 
+
+	static std::unordered_map<void*, size_t> s_FileMappings;
 
 	//Use of p_ to denote parameters from local vars in this long function
 	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, uint64_t& p_FileLength, FileError* p_Error, uint64_t p_Bytes, uint64_t p_Offset)
 	{
-		uint64_t realLength = FileSystem::FileSize(p_File);
-		if (realLength == INVALID_FILE)
+		p_FileLength = FileSystem::FileSize(p_File);
+		if (p_FileLength == INVALID_FILE)
 		{
 			*p_Error = FileError::FILE_NOT_FOUND;
 			return nullptr;
 		}
 
-		p_FileLength = realLength;
 		if (p_Bytes == ENTIRE_FILE)
 		{
-			p_Bytes = realLength;
+			p_Bytes = p_FileLength;
 		}
 		int flags = 0;
 		if ((p_Options & FileOpenOptions::READ) && (p_Options & FileOpenOptions::WRITE))
@@ -150,12 +150,19 @@ namespace TUtil {
 		{
 			*p_Error = FileError::FILE_NOT_FOUND;
 		}
+		close(fd);
+		s_FileMappings[result] = p_Bytes;
 		return result;
 	}
 
 	void FileSystem::UnmapFile(void* file)
 	{
-
+		auto it = s_FileMappings.find(file);
+		if (it != s_FileMappings.end())
+		{
+			munmap(file, it->second);
+			s_FileMappings.erase(it);
+		}
 	}
 
 }

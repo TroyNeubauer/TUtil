@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "TUtil/FileSystem.h"
+#include "TUtil/FileSystem/FileEnums.h"
 
 TEST_CASE("FileSystem::CreateDirectory", "[filesystem]") {
 	REQUIRE(TUtil::FileSystem::CreateDirectory("./test/"));

@@ -10,8 +10,6 @@ function mkdirs(file)
 			os.mkdir(total)
 		end
 	end
-
-
 end
 
 function copySrcFile(file)
@@ -22,17 +20,24 @@ function copySrcFile(file)
 	os.copyfile("./TUtil/vendor/"..file, destPath)
 end
 
-function copySrcFiles(path)
+local function ends_with(str, ending)
+   return ending == "" or str:sub(-#ending) == ending
+end
+
+function copySrcFiles(path, path2)
 	local srcPath = "./TUtil/vendor/"..path
-	local destPath = "./TUtil/src/vendor/"..path
-	mkdirs(destPath)
+	local destPath = "./TUtil/src/vendor/"..path2
+	print("Copying source files to Folder: "..destPath)
 
-	--for fname in lfs.dir(srcPath) do
-	--	print("files are: "..fname)
-	--end
-
-	--print("Copying from Folder: "..destPath)
-	os.copyfile(srcPath, destPath)
+	for file in io.popen("dir \""..srcPath.."\" /b"):lines() do
+		if ends_with(file, ".c") or ends_with(file, ".cpp") then
+			local srcFile = srcPath.."/"..file
+			local destFile = destPath.."/"..file
+			mkdirs(destFile)
+			--print("copying: "..srcFile.." to: "..destFile)
+			os.copyfile(srcFile, destFile)
+		end
+	end
 end
 
 
@@ -74,6 +79,11 @@ project "TUtil"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	
+	print "Copying dependent files..."
+	copyHeaderFile("str/Str.h")
+	copySrcFile("str/Str.cpp")
+	copySrcFiles("libarchive/libarchive", "libarchive")
 
 
 	files

@@ -91,17 +91,6 @@ namespace TUtil {
 		return true;
 	}
 
-	bool FileSystem::CreateFileWithParents(const char* path)
-	{
-		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_READ, 0, nullptr, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
-		if (handle == INVALID_HANDLE_VALUE)
-		{
-			return false;
-		}
-		CloseHandle(handle);//A bit wasteful. Looking into assigning the handle to a path might be more efficent since Paths are usually opened anyway
-		return true;
-	}
-
 	bool FileSystem::CreateDirectory(const char* path)
 	{
 		

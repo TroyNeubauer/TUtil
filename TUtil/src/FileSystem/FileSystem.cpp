@@ -65,6 +65,13 @@ namespace TUtil {
 		dest[index] = 0;
 	}
 
+	bool FileSystem::CreateFileWithParents(const char* path)
+	{
+		Path pathObj(path);
+		Path parent = pathObj.GetParent();
+		return parent.CreateDirectory() && pathObj.CreateFile();
+	}
+
 	bool FileSystem::IsExtension(const char* fileName, const char* extension)
 	{
 		const char* lastDot = fileName;
@@ -81,7 +88,8 @@ namespace TUtil {
 	bool FileSystem::CreateDirectories(const char* path)
 	{
 		FileSystem::PathNameIterator(path, [](const char* fileName, const char* total, const char* rest) -> bool {
-			return !FileSystem::CreateDirectory(total);
+			FileSystem::CreateDirectory(total);
+			return false;
 		});
 		return FileSystem::Exists(path);
 	}
