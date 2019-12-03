@@ -150,6 +150,9 @@ public:
     void                reserve_discard(int cap);
     void                shrink_to_fit();
 
+	inline char* begin() { return Data; }
+	inline char* end() { return Data + length(); }
+
     inline char&        operator[](size_t i)                    { return Data[i]; }
     inline char         operator[](size_t i) const              { return Data[i]; }
     //explicit operator const char*() const{ return Data; }

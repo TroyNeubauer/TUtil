@@ -10,6 +10,7 @@ namespace TUtil {
 	//A nicer looking api for C-strings
 	//Unless otherwise specified, all methods in this class will accecpt null pointers properly
 	namespace StringUtils {
+
 		//Two nullptrs are not equal to each other
 		//The empty string ("") is always equal to itself
 		bool Equal(const char* a, const char* b);
@@ -17,9 +18,18 @@ namespace TUtil {
 		//The empty string always contains itself
 		bool Contains(const char* string, const char* target);
 
+
 		inline size_t Length(const char* string, const char* stringEnd) { return stringEnd - string; }
 		size_t Length(const char* string);
 		inline size_t Capacity(const char* string) { return Length(string) + 1; }
+		
+		inline void Copy(char* dest, size_t capacity, const char* src) { strncpy(dest, src, capacity); }
+
+		template<typename T>
+		inline T* begin(T* string) { return string; }
+		
+		template<typename T>
+		inline T* end(T* string) { return string + Length(string); }
 
 		bool EndsWith(const char* string, const char* stringEnd, const char* target, const char* targetEnd);
 		inline bool EndsWith(const char* string, const char* target) { return EndsWith(string, string + Length(string), target, target + Length(target)); }
