@@ -48,11 +48,16 @@ namespace TUtil {
 					return false;
 				return EndsWithHelper(stringEnd - 1, target, targetEnd - 1);
 			}
+			
+			constexpr bool StartsWithHelper(const char* string, const char* target)
+			{
+				return (*target == 0x00) || ((*string == *target) && StartsWithHelper(string + 1, target + 1));
+			}
 		
 			constexpr bool StartsWith(const char* string, const char* target)
 			{
-				if (string == nullptr || target == nullptr) return false;
-				return (*string == *target) && StartsWith(string + 1, target + 1);
+				if (string == nullptr || target == nullptr || *string == 0x00 || *target == 0x00) return false;
+				return StartsWithHelper(string, target);
 			}
 		
 			constexpr size_t Length(const char* string)

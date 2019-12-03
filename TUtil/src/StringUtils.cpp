@@ -62,7 +62,7 @@ namespace TUtil {
 
 		bool StartsWith(const char* string, const char* target)
 		{
-			if (string == nullptr || target == nullptr)
+			if (string == nullptr || target == nullptr || *target == 0x00)
 				return false;
 			char s, t;
 			while ((t = *target))
@@ -84,7 +84,7 @@ namespace TUtil {
 				return -1;
 			char c;
 			uint64_t i = 0;
-			while (c = string[i])
+			while ((c = string[i]))
 			{
 				if (c == target)
 					return i;
