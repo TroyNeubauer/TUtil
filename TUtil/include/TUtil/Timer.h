@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-
+#include <inttypes.h>
 
 #ifdef T_PLATFORM_WINDOWS
 	#include <Windows.h>
@@ -41,7 +41,7 @@ namespace TUtil {
 		static inline void FormatNanos(char* buf, uint64_t bufSize, const char* message, uint64_t nanos)
 		{
 			if (nanos < 1000)
-				snprintf(buf, bufSize, "%s %llu nanoseconds", message,			 nanos);
+				snprintf(buf, bufSize, "%s %" PRIu64 " nanoseconds", message,			 nanos);
 			else if (nanos < (1000ULL * 1000ULL))
 				snprintf(buf, bufSize, "%s %.2f microseconds", message,	(double) nanos / 1000.0);
 			else if (nanos < (1000ULL * 1000ULL * 1000ULL))
