@@ -85,9 +85,21 @@ namespace TUtil {
 
 	void System::Init()
 	{
+		startTimer = new Timer();
 		pid = getpid();
 		//get_usage(&lastStat);
 	}
+
+	static Timer* startTimer = nullptr;
+
+	float System::GetTime()
+	{
+		if (startTimer == nullptr)
+			return -1.0f;
+		else
+			return static_cast<float>(startTimer->Stop().Seconds());
+	}
+
 	bool System::KBHit()
 	{
 		termios term;

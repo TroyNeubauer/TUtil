@@ -10,6 +10,9 @@ namespace TUtil {
 	public:
 		static void Init();
 
+		//Returns the time since init was called in seconds or -1 if Init hasnt been called yet
+		static float GetTime();
+
 		//Uses stack allocation if avilable. Returns a buffer of the size: elements * sizeof(T)
 		template<typename T>
 		inline static T* FastNew(size_t elements);

@@ -3,6 +3,7 @@
 #ifdef T_PLATFORM_WINDOWS
 
 #include "TUtil/System.h"
+#include "TUtil/Timer.h"
 #include "WindowsUtils.h"
 
 #include <Windows.h>
@@ -26,9 +27,12 @@ namespace TUtil {
 	static ULARGE_INTEGER lastCPU, lastSysCPU, lastUserCPU;
 	static int numProcessors;
 	static HANDLE self;
+	static Timer* startTimer = nullptr;
+
 
 	void System::Init()
 	{
+		startTimer = new Timer();
 		PdhOpenQuery(NULL, NULL, &cpuQuery);
 		PdhAddEnglishCounter(cpuQuery, L"\\Processor(_Total)\\% Processor Time", NULL, &cpuTotal);
 		PdhCollectQueryData(cpuQuery);
@@ -47,6 +51,15 @@ namespace TUtil {
 		memcpy(&lastSysCPU, &fsys, sizeof(FILETIME));
 		memcpy(&lastUserCPU, &fuser, sizeof(FILETIME));
 	}
+
+	float System::GetTime()
+	{
+		if (startTimer == nullptr)
+			return -1.0f;
+		else
+			return static_cast<float>(startTimer->Stop().Seconds());
+	}
+
 
 	bool System::KBHit() {
 		return _kbhit();
