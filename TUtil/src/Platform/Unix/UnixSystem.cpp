@@ -2,6 +2,7 @@
 #ifdef T_PLATFORM_UNIX
 
 #include "TUtil/System.h"
+#include "TUtil/Timer.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -83,6 +84,8 @@ namespace TUtil {
 		return 0;
 	}*/
 
+	static Timer* startTimer = nullptr;
+
 	void System::Init()
 	{
 		startTimer = new Timer();
@@ -90,7 +93,6 @@ namespace TUtil {
 		//get_usage(&lastStat);
 	}
 
-	static Timer* startTimer = nullptr;
 
 	float System::GetTime()
 	{
