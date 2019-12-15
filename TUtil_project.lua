@@ -60,7 +60,6 @@ project "TUtil"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on" 
 	intrinsics "on"
 	systemversion "latest"
 
