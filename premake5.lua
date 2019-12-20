@@ -1,3 +1,15 @@
+newoption {
+	trigger     = "compiler",
+	value       = "compiler",
+	description = "Choose a compiler",
+	default     = "",
+	allowed =
+	{
+		{ "clang",    "Clang LLVM Compiler" },
+		{ "gcc",  "GNU Compiler" },
+		{ "msc",  "MSVC (Windows only)" },
+	}
+}
 
 
 function mkdirs(file)
@@ -60,6 +72,12 @@ workspace "TUtil"
 		"Debug",
 		"Release",
 	}
+
+	if _OPTIONS["compiler"] ~= "" then
+		print("Using compiler ".._OPTIONS["compiler"])
+		toolset(_OPTIONS["compiler"])
+	end
+	
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
