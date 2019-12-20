@@ -38,11 +38,10 @@
 	#if TARGET_IPHONE_SIMULATOR == 1
 		#error "IOS simulator is not supported!"
 	#elif TARGET_OS_IPHONE == 1
-		#define HZ_PLATFORM_IOS
+		#define T_PLATFORM_IOS
 		#error "IOS is not supported!"
 	#elif TARGET_OS_MAC == 1
-		#define HZ_PLATFORM_MACOS
-		#error "MacOS is not supported!"
+		#define T_PLATFORM_OSX
 	#else
 		#error "Unknown Apple platform!"
 	#endif

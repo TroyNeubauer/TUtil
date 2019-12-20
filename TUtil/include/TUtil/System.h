@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 namespace TUtil {
 

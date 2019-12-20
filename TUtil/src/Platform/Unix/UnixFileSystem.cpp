@@ -15,6 +15,11 @@
 
 #include <unordered_map>
 
+#ifdef T_PLATFORM_OSX
+	#include <mach/error.h>
+	#include <sys/errno.h>
+#endif
+
 
 namespace TUtil {
 
@@ -75,7 +80,8 @@ namespace TUtil {
 		}
 		else
 		{
-			if (errno == EEXIST)
+			int error = errno;
+			if (error == EEXIST)
 				return true;
 			else
 				return false;
