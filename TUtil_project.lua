@@ -86,14 +86,6 @@ project "TUtil"
 		"%{VendorIncludeDir}/str"
 	}
 
-	filter "system:windows"
-		excludes "%{prj.name}/src/Platform/Unix"
-
-	filter "system:linux"
-		excludes "%{prj.name}/src/Platform/Windows"
-	
-
-
 	links 
 	{ 
 	}
@@ -102,12 +94,30 @@ project "TUtil"
 	{
 		"LIBARCHIVE_STATIC",
 	}
+	
+	filter "system:windows"
+		excludes "%{prj.name}/src/Platform/Unix"
+		excludes "%{prj.name}/src/Platform/Emscripten"
+
+	filter "system:linux or macosx"
+		excludes "%{prj.name}/src/Platform/Windows"
+		excludes "%{prj.name}/src/Platform/Emscripten"
+
+	filter "system:emscripten"
+		excludes "%{prj.name}/src/Platform/Windows"
+		excludes "%{prj.name}/src/Platform/Unix"
+	
+
+
 
 	filter "system:windows"
 		defines "PLATFORM_CONFIG_H=\"TUtil/vendor/libarchive/win_config.h\""
 
-	filter "system:linux"
+	filter "system:linux or macosx"
 		defines "PLATFORM_CONFIG_H=\"TUtil/vendor/libarchive/linux_config.h\""
+
+	filter "system:emscripten"
+		defines "PLATFORM_CONFIG_H=\"TUtil/vendor/libarchive/emscripten_config.h\""
 
 	filter "configurations:Debug"
 		defines "T_DEBUG"

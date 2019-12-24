@@ -114,6 +114,10 @@ namespace TUtil {
 
 	void FileSystem::AbsloutePath(const char* file, char* buf, uint32_t bufLength)
 	{
+		if (bufLength)
+		{
+			buf[0] = '\0';
+		}
 	}
 
 	bool FileSystem::Delete(const char* path)

@@ -6,11 +6,11 @@
 #ifdef T_PLATFORM_WINDOWS
 	#include <Windows.h>
 	typedef LARGE_INTEGER TimeType;
-#elif defined(T_PLATFORM_UNIX)
+#elif defined(T_PLATFORM_UNIX) || defined(T_PLATFORM_EMSCRIPTEN)
 	#include <time.h>
 	typedef timespec TimeType;
 #else
-	#error
+	#error Cannot find time implementation
 #endif
 
 namespace TUtil {

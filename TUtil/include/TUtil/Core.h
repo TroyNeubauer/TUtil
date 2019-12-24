@@ -6,20 +6,25 @@
 #include <stdlib.h>
 
 //========== COMPILER detect ==========
-#if defined(_MSC_VER)
+#if defined(__EMSCRIPTEN__)
+	#define T_COMPILER_EMSCRIPTEN
+
+#elif defined(_MSC_VER)
 	#define T_COMPILER_MSVC
 
 #elif defined(__GNUC__)
 	#define T_COMPILER_GCC
 #elif defined(__clang__)
 	#define T_COMPILER_CLANG
-#elif defined(__EMSCRIPTEN__ )
-	#define T_COMPILER_EMSCRIPTEN
 #endif
 
 
 //========== PLATFORM detect ==========
-#if defined(__ANDROID__)
+#if defined(T_COMPILER_EMSCRIPTEN)
+	#define T_PLATFORM_EMSCRIPTEN
+	#include <emscripten/emscripten.h>
+
+#elif defined(__ANDROID__)
 	#define T_PLATFORM_ANDROID
 	#define T_PLATFORM_UNIX
 	#define T_PLATFORM_LINUX
@@ -50,6 +55,7 @@
 #elif defined(__linux__)//Defined after android to target desktop linux
 	#define T_PLATFORM_UNIX
 	#define T_PLATFORM_LINUX
+
 #else
 	#error Unknown platform
 #endif
