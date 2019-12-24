@@ -378,19 +378,19 @@ typedef uint64_t uintmax_t;
 /* #undef HAVE_CHFLAGS */
 
 /* Define to 1 if you have the `chown' function. */
-//#define HAVE_CHOWN 1
+#define HAVE_CHOWN 1
 
 /* Define to 1 if you have the `chroot' function. */
-//#define HAVE_CHROOT 1
+#define HAVE_CHROOT 1
 
 /* Define to 1 if you have the <copyfile.h> header file. */
 /* #undef HAVE_COPYFILE_H */
 
 /* Define to 1 if you have the `ctime_r' function. */
-//#define HAVE_CTIME_R 1
+#define HAVE_CTIME_R 1
 
 /* Define to 1 if you have the <ctype.h> header file. */
-//#define HAVE_CTYPE_H 1
+#define HAVE_CTYPE_H 1
 
 /* Define to 1 if you have the `cygwin_conv_path' function. */
 /* #undef HAVE_CYGWIN_CONV_PATH */
@@ -484,7 +484,7 @@ typedef uint64_t uintmax_t;
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
-//#define HAVE_DIRENT_H 1
+#define HAVE_DIRENT_H 1
 
 /* Define to 1 if you have the `dirfd' function. */
 //#define HAVE_DIRFD 1
@@ -537,7 +537,7 @@ typedef uint64_t uintmax_t;
 /* #undef HAVE_DECL_GETACLCNT */
 
 /* Define to 1 if you have the `fchdir' function. */
-//#define HAVE_FCHDIR 1
+#define HAVE_FCHDIR 1
 
 /* Define to 1 if you have the `fchflags' function. */
 /* #undef HAVE_FCHFLAGS */
@@ -561,7 +561,7 @@ typedef uint64_t uintmax_t;
 /* #undef HAVE_FGETEA */
 
 /* Define to 1 if you have the `fgetxattr' function. */
-//#define HAVE_FGETXATTR 1
+#define HAVE_FGETXATTR 1
 
 /* Define to 1 if you have the `flistea' function. */
 /* #undef HAVE_FLISTEA */
@@ -582,91 +582,93 @@ typedef uint64_t uintmax_t;
 //#define HAVE_FSETXATTR 1
 
 /* Define to 1 if you have the `fstat' function. */
-//#define HAVE_FSTAT 1
+#define HAVE_FSTAT 1
 
 /* Define to 1 if you have the `fstatat' function. */
-//#define HAVE_FSTATAT 1
+#define HAVE_FSTATAT 1
 
 /* Define to 1 if you have the `fstatfs' function. */
-//#define HAVE_FSTATFS 1
+#define HAVE_FSTATFS 1
 
 /* Define to 1 if you have the `fstatvfs' function. */
-//#define HAVE_FSTATVFS 1
+#define HAVE_FSTATVFS 1
 
 /* Define to 1 if you have the `ftruncate' function. */
-//#define HAVE_FTRUNCATE 1
+#define HAVE_FTRUNCATE 1
 
 /* Define to 1 if you have the `futimens' function. */
-//#define HAVE_FUTIMENS 1
+#define HAVE_FUTIMENS 1
 
 /* Define to 1 if you have the `futimes' function. */
-//#define HAVE_FUTIMES 1
+#define HAVE_FUTIMES 1
 
 /* Define to 1 if you have the `futimesat' function. */
-//#define HAVE_FUTIMESAT 1
+#define HAVE_FUTIMESAT 1
 
 /* Define to 1 if you have the `getea' function. */
 /* #undef HAVE_GETEA */
 
 /* Define to 1 if you have the `geteuid' function. */
-//#define HAVE_GETEUID 1
+#define HAVE_GETEUID 1
 
 /* Define to 1 if you have the `getgrgid_r' function. */
-//#define HAVE_GETGRGID_R 1
+#define HAVE_GETGRGID_R 1
 
 /* Define to 1 if you have the `getgrnam_r' function. */
-//#define HAVE_GETGRNAM_R 1
+#define HAVE_GETGRNAM_R 1
 
 /* Define to 1 if you have the `getpid' function. */
-//#define HAVE_GETPID 1
+#define HAVE_GETPID 1
 
 /* Define to 1 if you have the `getpwnam_r' function. */
-//#define HAVE_GETPWNAM_R 1
+#define HAVE_GETPWNAM_R 1
 
 /* Define to 1 if you have the `getpwuid_r' function. */
-//#define HAVE_GETPWUID_R 1
+#define HAVE_GETPWUID_R 1
 
 /* Define to 1 if you have the `getvfsbyname' function. */
 /* #undef HAVE_GETVFSBYNAME */
 
 /* Define to 1 if you have the `getxattr' function. */
-//#define HAVE_GETXATTR 1
+#define HAVE_GETXATTR 1
 
 /* Define to 1 if you have the `gmtime_r' function. */
-//#define HAVE_GMTIME_R 1
+#define HAVE_GMTIME_R 1
 
 /* Define to 1 if you have the <grp.h> header file. */
-//#define HAVE_GRP_H 1
+#define HAVE_GRP_H 1
 
 /* Define to 1 if you have the `iconv' function. */
-//#define HAVE_ICONV 1
+#define HAVE_ICONV 1
 
 /* Define to 1 if you have the <iconv.h> header file. */
-//#define HAVE_ICONV_H 1
+#define HAVE_ICONV_H 1
+//The emscripten libc iconv.h file doesnt define ICONV_CONST
+#define ICONV_CONST
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-//#define HAVE_INTTYPES_H 1
+#define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the <io.h> header file. */
 /* #undef HAVE_IO_H */
 
 /* Define to 1 if you have the <langinfo.h> header file. */
-//#define HAVE_LANGINFO_H 1
+#define HAVE_LANGINFO_H 1
 
 /* Define to 1 if you have the `lchflags' function. */
 /* #undef HAVE_LCHFLAGS */
 
 /* Define to 1 if you have the `lchmod' function. */
-#define HAVE_LCHMOD
+#define HAVE_LCHMOD 1
 
 /* Define to 1 if you have the `lchown' function. */
-//#define HAVE_LCHOWN 1
+#define HAVE_LCHOWN 1
 
 /* Define to 1 if you have the `lgetea' function. */
 /* #undef HAVE_LGETEA */
 
 /* Define to 1 if you have the `lgetxattr' function. */
-//#define HAVE_LGETXATTR 1
+#define HAVE_LGETXATTR 1
 
 /* Define to 1 if you have the `acl' library (-lacl). */
 //#define HAVE_LIBACL 1
@@ -829,16 +831,16 @@ typedef uint64_t uintmax_t;
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `mkdir' function. */
-//#define HAVE_MKDIR 1
+#define HAVE_MKDIR 1
 
 /* Define to 1 if you have the `mkfifo' function. */
-//#define HAVE_MKFIFO 1
+#define HAVE_MKFIFO 1
 
 /* Define to 1 if you have the `mknod' function. */
-//#define HAVE_MKNOD 1
+#define HAVE_MKNOD 1
 
 /* Define to 1 if you have the `mkstemp' function. */
-//#define HAVE_MKSTEMP 1
+#define HAVE_MKSTEMP 1
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 /* #undef HAVE_NDIR_H */
@@ -868,7 +870,7 @@ typedef uint64_t uintmax_t;
 #define HAVE_OPENAT 1
 
 /* Define to 1 if you have the <paths.h> header file. */
-//#define HAVE_PATHS_H 1
+#define HAVE_PATHS_H 1
 
 /* Define to 1 if you have the <pcreposix.h> header file. */
 /* #undef HAVE_PCREPOSIX_H */
@@ -880,31 +882,31 @@ typedef uint64_t uintmax_t;
 /* #undef HAVE_PKCS5_PBKDF2_HMAC_SHA1 */
 
 /* Define to 1 if you have the `poll' function. */
-//#define HAVE_POLL 1
+#define HAVE_POLL 1
 
 /* Define to 1 if you have the <poll.h> header file. */
-//#define HAVE_POLL_H 1
+#define HAVE_POLL_H 1
 
 /* Define to 1 if you have the `posix_spawnp' function. */
-//#define HAVE_POSIX_SPAWNP 1
+#define HAVE_POSIX_SPAWNP 1
 
 /* Define to 1 if you have the <process.h> header file. */
-/* #undef HAVE_PROCESS_H */
+#define HAVE_PROCESS_H 1
 
 /* Define to 1 if you have the <pthread.h> header file. */
-//#define HAVE_PTHREAD_H 1
+#define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the <pwd.h> header file. */
-//#define HAVE_PWD_H 1
+#define HAVE_PWD_H 1
 
 /* Define to 1 if you have the `readdir_r' function. */
-/* #undef HAVE_READDIR_R */
+#define HAVE_READDIR_R 1
 
 /* Define to 1 if you have the `readlink' function. */
-//#define HAVE_READLINK 1
+#define HAVE_READLINK 1
 
 /* Define to 1 if you have the `readlinkat' function. */
-//#define HAVE_READLINKAT 1
+#define HAVE_READLINKAT 1
 
 /* Define to 1 if you have the `readpassphrase' function. */
 /* #undef HAVE_READPASSPHRASE */
@@ -1088,13 +1090,13 @@ typedef uint64_t uintmax_t;
 /* #undef HAVE_SYS_UTIME_H */
 
 /* Define to 1 if you have the <sys/utsname.h> header file. */
-//#define HAVE_SYS_UTSNAME_H 1
+#define HAVE_SYS_UTSNAME_H 1
 
 /* Define to 1 if you have the <sys/vfs.h> header file. */
 //#define HAVE_SYS_VFS_H 1
 
 /* Define to 1 if you have <sys/wait.h> that is POSIX.1 compatible. */
-//#define HAVE_SYS_WAIT_H 1
+#define HAVE_SYS_WAIT_H 1
 
 /* Define to 1 if you have the <sys/xattr.h> header file. */
 //#define HAVE_SYS_XATTR_H 1

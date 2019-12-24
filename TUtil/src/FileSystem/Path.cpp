@@ -10,7 +10,7 @@ namespace TUtil {
 
 	Path Path::GetParent() const
 	{
-		uint32_t index = StringUtils::LastIndexOf(m_Path.c_str(), '/');
+		uint64_t index = StringUtils::LastIndexOf(m_Path.c_str(), '/');
 		Buf result;
 		result.set(m_Path.c_str(), m_Path.c_str() + index);
 		return result;

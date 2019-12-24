@@ -51,7 +51,8 @@ function copyHeaderFile(file)
 end
 
 
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/"
+emscriptenOutputdir = "%{cfg.buildcfg}-emcc/"
 
 VendorIncludeDir = "TUtil/include/TUtil/vendor"
 
@@ -63,8 +64,6 @@ project "TUtil"
 	intrinsics "on"
 	systemversion "latest"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 
 	print "Copying dependent files..."
@@ -94,6 +93,14 @@ project "TUtil"
 	{
 		"LIBARCHIVE_STATIC",
 	}
+
+	filter "system:windows or macosx or linux"
+		targetdir ("bin/" .. outputdir)
+		objdir ("bin-int/" .. outputdir)
+
+	filter "system:emscripten"
+		targetdir ("bin/" .. emscriptenOutputdir)
+		objdir ("bin-int/" .. emscriptenOutputdir)
 	
 	filter "system:windows"
 		excludes "%{prj.name}/src/Platform/Unix"

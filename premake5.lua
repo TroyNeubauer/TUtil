@@ -99,10 +99,6 @@ project "TUtil"
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
 	print "Copying dependent files..."
-	copyHeaderFile("str/Str.h")
-	copySrcFile("str/Str.cpp")
-	copySrcFiles("libarchive/libarchive", "libarchive")
-
 
 	files
 	{
@@ -121,7 +117,7 @@ project "TUtil"
 	print "Copying dependent files..."
 	copyHeaderFile("str/Str.h")
 	copySrcFile("str/Str.cpp")
-	--copySrcFiles("libarchive/libarchive")
+	copySrcFiles("libarchive/libarchive", "libarchive")
 
 	links 
 	{ 
