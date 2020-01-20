@@ -15,7 +15,7 @@ namespace TUtil {
 		//For a visual representation of each function
 		enum class InterpolationMethod
 		{
-			LINEAR, COSINE, EXPONENTIAL, SQRT, POLYNOMIAL
+			LINEAR, COSINE, POLYNOMIAL
 		};
 
 
@@ -44,9 +44,7 @@ namespace TUtil {
 		{
 			if		(method == InterpolationMethod::LINEAR)			return Lerp(a, b, f);
 			else if (method == InterpolationMethod::COSINE)			return Lerp(a, b, static_cast<T>(0.5) * static_cast<T>(static_cast<T>(1.0) - cos(PI<T>() * f)) );
-			else if (method == InterpolationMethod::EXPONENTIAL)	return Lerp(a, b, pow(static_cast<T>(2.0), f) - static_cast<T>(1.0));
-			else if (method == InterpolationMethod::SQRT)			return Lerp(a, b, sqrt(f));
-			else if (method == InterpolationMethod::POLYNOMIAL)		return Lerp(a, b, pow(f, static_cast<T>(2.0)));
+			else if (method == InterpolationMethod::POLYNOMIAL)		return Lerp(a, b, f * f));
 			else													return a;
 		}
 
