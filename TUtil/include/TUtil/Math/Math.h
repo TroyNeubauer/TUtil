@@ -44,7 +44,7 @@ namespace TUtil {
 		{
 			if		(method == InterpolationMethod::LINEAR)			return Lerp(a, b, f);
 			else if (method == InterpolationMethod::COSINE)			return Lerp(a, b, static_cast<T>(0.5) * static_cast<T>(static_cast<T>(1.0) - cos(PI<T>() * f)) );
-			else if (method == InterpolationMethod::POLYNOMIAL)		return Lerp(a, b, f * f));
+			else if (method == InterpolationMethod::POLYNOMIAL)		return Lerp(a, b, f * f);
 			else													return a;
 		}
 
