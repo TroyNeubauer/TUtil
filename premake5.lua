@@ -1,8 +1,6 @@
 newoption {
 	trigger     = "compiler",
-	value       = "compiler",
 	description = "Choose a compiler",
-	default     = "",
 	allowed =
 	{
 		{ "clang",	"Clang LLVM Compiler" },
