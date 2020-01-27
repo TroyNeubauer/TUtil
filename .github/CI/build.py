@@ -77,7 +77,8 @@ else:
 	print('Unknown compiler! ' + compiler)
 	sys.exit(1)
 
-print('running premake: \"' + premakeCommand + '\"')
+run("tree")
+
 run(premakeCommand)
 
 
@@ -87,8 +88,7 @@ if osName == 'windows':
 else:
 	command = 'make -j2 config=' + buildConfiguration
 
-print('running: ' + command)	
-print('compiling...')
+
 
 if osName == 'windows':
 	s = ';'
