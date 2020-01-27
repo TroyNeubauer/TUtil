@@ -6,6 +6,7 @@ from distutils.file_util import copy_file
 from distutils.dir_util import mkpath
 
 def run(command, in_env = None):
+	print('Running command: ' + command)
 	process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=in_env)
 
 	# Poll process for new output until finished
@@ -67,7 +68,7 @@ elif compiler == 'gcc':
 	premakeCommand += '--os=' + osName + ' --compiler=gcc gmake2'
 
 elif compiler == 'clang':
-	premakeCommand += '--os=' + osName + ' --compiler=gcc gmake2'
+	premakeCommand += '--os=' + osName + ' --compiler=clang gmake2'
 
 elif compiler == 'emcc':
 	premakeCommand += '--os=emscripten --scripts=vendor/premake/scripts gmake2'
@@ -115,6 +116,8 @@ env.pop("AR", None)
 print('env: ' + str(env))
 
 run(command, env)
+
+run("tree")
 
 print("Running test")
 run("bin/Debug-linux-x86_64/Test/Test")
