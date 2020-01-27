@@ -118,11 +118,16 @@ run(command, env)
 
 print("Running test")
 
-if buildConfiguration == "debug":
-	testExePath = "bin/Debug-"
+if osName == "windows":
+	slash = '\\'
 else:
-	testExePath = "bin/Release-"
-testExePath += osName + "-x86_64/Test/Test"
+	slash = '/'
+
+if buildConfiguration == "debug":
+	testExePath = "bin" + slash + "Debug-"
+else:
+	testExePath = "bin" + slash + "Release-"
+testExePath += osName + "-x86_64" + slash + "Test" + slash + "Test"
 
 if osName == "windows":
 	testExePath += ".exe"

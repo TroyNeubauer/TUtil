@@ -5,9 +5,10 @@ newoption {
 	default     = "",
 	allowed =
 	{
-		{ "clang",    "Clang LLVM Compiler" },
-		{ "gcc",  "GNU Compiler" },
-		{ "msc",  "MSVC (Windows only)" },
+		{ "clang",	"Clang LLVM Compiler" },
+		{ "gcc",	"GNU Compiler" },
+		{ "msc",	"MSVC (Windows only)" },
+		{ "", 		"Default" }
 	}
 }
 
