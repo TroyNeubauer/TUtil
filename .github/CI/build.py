@@ -23,8 +23,8 @@ def run(command, in_env = None):
 		print('Expected error code 0, got ' + str(exitCode))
 		sys.exit(1)
 
-if len(sys.argv) != 4:
-	raise Exception('Build script must have three args! Args are ' + str(sys.argv))
+if len(sys.argv) != 5:
+	raise Exception('Build script must have four args! Args are ' + str(sys.argv))
 
 
 osName = sys.argv[1]
