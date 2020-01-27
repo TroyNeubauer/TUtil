@@ -135,6 +135,7 @@ if osName == "windows":
 run(testExePath)
 
 if coverage:
+	run("./GetCodeGCOV.sh")
 	print("Uploading coverage report!")
 	run("curl -s https://codecov.io/bash > codecov.sh")
 	run("chmod +x codecov.sh")
