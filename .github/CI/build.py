@@ -45,7 +45,7 @@ if osName == 'linux':
 	premakeCommand += 'premake5 '
 
 elif osName == 'windows':
-	premakeCommand += 'call Hazel\\vendor\\premake\\bin\\premake5.exe '
+	premakeCommand += 'call vendor\\premake\\bin\\premake5.exe '
 
 elif osName == 'macosx':
 	print('osx is unsupported for now!')
@@ -70,7 +70,7 @@ elif compiler == 'clang':
 	premakeCommand += '--os=' + osName + ' --compiler=gcc gmake2'
 
 elif compiler == 'emcc':
-	premakeCommand += '--os=emscripten --scripts=Hazel/vendor/premake/scripts gmake2'
+	premakeCommand += '--os=emscripten --scripts=vendor/premake/scripts gmake2'
 
 else:
 	print('Unknown compiler! ' + compiler)
@@ -115,6 +115,9 @@ env.pop("AR", None)
 print('env: ' + str(env))
 
 run(command, env)
+
+print("Running test")
+run("bin/Debug-linux-x86_64/Test/Test")
 
 
 if coverage:

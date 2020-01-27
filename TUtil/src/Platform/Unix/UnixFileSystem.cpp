@@ -29,7 +29,7 @@ namespace TUtil {
 		return stat64(path, &data) == 0;
 	}
 
-	uint64_t FileSystem::FileSize(const char* path)
+	std::uint64_t FileSystem::FileSize(const char* path)
 	{
 		struct stat64 data;
 		int result = stat64(path, &data);
@@ -129,7 +129,7 @@ namespace TUtil {
 	static std::unordered_map<void*, size_t> s_FileMappings;
 
 	//Use of p_ to denote parameters from local vars in this long function
-	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, uint64_t& p_FileLength, FileError* p_Error, uint64_t p_Bytes, uint64_t p_Offset)
+	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, std::uint64_t& p_FileLength, FileError* p_Error, std::uint64_t p_Bytes, std::uint64_t p_Offset)
 	{
 		p_FileLength = FileSystem::FileSize(p_File);
 		if (p_FileLength == INVALID_FILE)

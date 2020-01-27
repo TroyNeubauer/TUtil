@@ -119,28 +119,28 @@ namespace TUtil {
 		return byteswaiting > 0;
 	}
 
-	uint64_t System::GetTotalMachineVirtualMemory() {
+	std::uint64_t System::GetTotalMachineVirtualMemory() {
 		return 0;
 	}
 
-	uint64_t System::GetSystemVirtualMemoryUsage() {
+	std::uint64_t System::GetSystemVirtualMemoryUsage() {
 		return 0;
 	}
 
-	uint64_t System::GetProcessVirtualMemoryUsage() {
+	std::uint64_t System::GetProcessVirtualMemoryUsage() {
 		return 0;
 	}
 
 	//stats for physical memory
-	uint64_t System::GetTotalMachinePhysicalMemory() {
+	std::uint64_t System::GetTotalMachinePhysicalMemory() {
 		return 0;
 	}
 
-	uint64_t System::GetSystemPhysicalMemoryUsage() {
+	std::uint64_t System::GetSystemPhysicalMemoryUsage() {
 		return 0;
 	}
 
-	uint64_t System::GetProcessPhysicalMemoryUsage() {
+	std::uint64_t System::GetProcessPhysicalMemoryUsage() {
 		return 0;
 	}
 
@@ -164,15 +164,15 @@ namespace TUtil {
 		return sysconf(_SC_NPROCESSORS_ONLN);
 	}
 
-	uint64_t System::PageSize() {
+	std::uint64_t System::PageSize() {
 		return getpagesize();
 	}
 
-	uint64_t System::AllocationGranularity() {
+	std::uint64_t System::AllocationGranularity() {
 		return 0;
 	}
 
-	uint64_t System::PerformanceCounterResulution()
+	std::uint64_t System::PerformanceCounterResulution()
 	{
 		return CLOCKS_PER_SEC;
 	}

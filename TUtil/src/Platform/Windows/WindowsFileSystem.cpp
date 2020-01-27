@@ -61,7 +61,7 @@ namespace TUtil {
 		return StringUtils::Equal(fullA, fullB);
 	}
 
-	uint64_t FileSystem::FileSize(const char* path)
+	std::uint64_t FileSystem::FileSize(const char* path)
 	{
 		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 		if (handle == INVALID_HANDLE_VALUE)
@@ -127,14 +127,14 @@ namespace TUtil {
 
 
 	//Use of p_ to denote parameters from local vars in this long function
-	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, uint64_t& p_FileLength, FileError* p_Error, uint64_t p_Bytes, uint64_t p_Offset)
+	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, std::uint64_t& p_FileLength, FileError* p_Error, std::uint64_t p_Bytes, std::uint64_t p_Offset)
 	{
 		if (p_Bytes == ENTIRE_FILE)
 		{
 			p_Bytes = 0;
 			p_Offset = 0;
 		}
-		uint64_t pageSize = System::PageSize();
+		std::uint64_t pageSize = System::PageSize();
 
 		DWORD flags = (p_Options & FileOpenOptions::RANDOM_ACCESS) ? FILE_FLAG_RANDOM_ACCESS : FILE_FLAG_SEQUENTIAL_SCAN;
 		DWORD desiredAccess = 0;

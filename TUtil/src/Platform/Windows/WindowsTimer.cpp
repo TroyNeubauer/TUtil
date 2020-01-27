@@ -24,7 +24,7 @@ namespace TUtil {
 		return *this;
 	}
 
-	uint64_t Timer::Nanos()
+	std::uint64_t Timer::Nanos()
 	{
 		return (end.QuadPart - start.QuadPart) * 1000000000ULL / System::PerformanceCounterResulution();
 	}

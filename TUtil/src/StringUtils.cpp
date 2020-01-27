@@ -83,7 +83,7 @@ namespace TUtil {
 			if (string == nullptr)
 				return -1;
 			char c;
-			uint64_t i = 0;
+			std::uint64_t i = 0;
 			while ((c = string[i]))
 			{
 				if (c == target)

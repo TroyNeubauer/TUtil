@@ -30,14 +30,14 @@ namespace TUtil {
 		}
 	}
 
-	uint64_t FileSystem::FileSize(const char* path)
+	std::uint64_t FileSystem::FileSize(const char* path)
 	{
 		FILE* file = fopen(path, "r");
 
 		if (file)
 		{
 			fseek(file, 0, SEEK_END);
-			uint64_t pos = ftell(file);
+			std::uint64_t pos = ftell(file);
 
 			fclose(file);
 			return pos;
@@ -88,7 +88,7 @@ namespace TUtil {
 	}
 
 	//Use of p_ to denote parameters from local vars in this long function
-	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, uint64_t& p_FileLength, FileError* p_Error, uint64_t p_Bytes, uint64_t p_Offset)
+	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, std::uint64_t& p_FileLength, FileError* p_Error, std::uint64_t p_Bytes, std::uint64_t p_Offset)
 	{
 		p_FileLength = FileSystem::FileSize(p_File);
 		if (p_FileLength == INVALID_FILE)

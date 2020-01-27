@@ -3,11 +3,13 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+#include "Core.h"
+
 #ifdef T_PLATFORM_WINDOWS
 	#include <Windows.h>
 	typedef LARGE_INTEGER TimeType;
 #elif defined(T_PLATFORM_UNIX) || defined(T_PLATFORM_EMSCRIPTEN)
-	#include <time.h>
+	#include <ctime>
 	typedef timespec TimeType;
 #else
 	#error Cannot find time implementation
@@ -21,7 +23,7 @@ namespace TUtil {
 
 		Timer& Start();
 		Timer& Stop();
-		uint64_t Nanos();
+		std::uint64_t Nanos();
 		
 		double Seconds()
 		{

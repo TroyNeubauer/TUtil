@@ -7,7 +7,7 @@
 
 namespace TUtil {
 
-	static File* OpenRegularFile(const char* path, FileOpenOptions options, FileError* error, uint64_t& length)
+	static File* OpenRegularFile(const char* path, FileOpenOptions options, FileError* error, std::uint64_t& length)
 	{
 		void* memory = FileSystem::MapFile(path, options, length, error);
 		if (*error != FileError::NONE)
@@ -18,7 +18,7 @@ namespace TUtil {
 
 	File* File::Open(Path& p_Path, FileOpenOptions p_Options, FileError* p_Error)
 	{
-		uint64_t length;
+		std::uint64_t length;
 		if (p_Path.m_InArchive)
 		{
 			char* end = nullptr;
@@ -79,7 +79,7 @@ namespace TUtil {
 		archive* a = archive_read_new();
 		archive_read_support_filter_all(a);
 		archive_read_support_format_all(a);
-		uint64_t r = archive_read_open_memory(a, parent->Data(), parent->Length());
+		std::uint64_t r = archive_read_open_memory(a, parent->Data(), parent->Length());
 		if (r != ARCHIVE_OK)
 			printf("Invalid file %s\n", path.ToString());
 		printf("archive %s contains: \n", path.ToString());
@@ -121,7 +121,7 @@ namespace TUtil {
 	{
 	}
 
-	void ArchivedFile::Write(void* data, uint64_t bytes, uint64_t offset)
+	void ArchivedFile::Write(void* data, std::uint64_t bytes, std::uint64_t offset)
 	{
 		if (offset + bytes > m_Length)
 		{
@@ -140,7 +140,7 @@ namespace TUtil {
 		memcpy(m_Data + offset, data, bytes);
 	}
 
-	void ArchivedFile::Read(void* data, uint64_t bytes, uint64_t offset)
+	void ArchivedFile::Read(void* data, std::uint64_t bytes, std::uint64_t offset)
 	{
 		T_ASSERT(offset + bytes <= m_Length, "Attempt to read past the end of the buffer");
 		memcpy(data, m_Data + offset, bytes);
@@ -164,7 +164,7 @@ namespace TUtil {
 	}
 
 
-	MemoryMappedFile::MemoryMappedFile(const Path& path, FileOpenOptions options, FileError* error, uint8_t* data, uint64_t length)
+	MemoryMappedFile::MemoryMappedFile(const Path& path, FileOpenOptions options, FileError* error, uint8_t* data, std::uint64_t length)
 		: File(path, options)
 	{
 		this->m_Length = length;
@@ -176,7 +176,7 @@ namespace TUtil {
 		//Nop. Since we are using memory mapping, the OS and TLB handle the heavy lifting
 	}
 
-	void MemoryMappedFile::Write(void* data, uint64_t bytes, uint64_t offset)
+	void MemoryMappedFile::Write(void* data, std::uint64_t bytes, std::uint64_t offset)
 	{
 		if (offset + bytes > m_Length)
 		{
@@ -191,7 +191,7 @@ namespace TUtil {
 		memcpy(m_Data + offset, data, bytes);
 	}
 
-	void MemoryMappedFile::Read(void* data, uint64_t bytes, uint64_t offset)
+	void MemoryMappedFile::Read(void* data, std::uint64_t bytes, std::uint64_t offset)
 	{
 		T_ASSERT(offset + bytes <= m_Length, "Attempt to read past the end of the buffer");
 		memcpy(data, m_Data + offset, bytes);

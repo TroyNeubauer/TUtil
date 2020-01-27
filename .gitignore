@@ -10,6 +10,10 @@ TUtil/src/vendor/*
 **/*.sln
 **/*.vcxproj*
 
+#VSCode
+.vscode/
+**/test/
+
 #make
 **/Makefile
 **/.project
@@ -26,3 +30,4 @@ TUtil/src/vendor/*
 
 .cproject
 .settings/
+

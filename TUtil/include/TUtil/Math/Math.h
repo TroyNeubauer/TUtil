@@ -1,11 +1,12 @@
 #pragma once
-#include <stdint.h>
 
 #include <cmath>
 
+#include "TUtil/Core.h"
+
 namespace TUtil {
 	namespace Math {
-		uint64_t LogFloor(uint64_t value);
+		std::uint64_t LogFloor(std::uint64_t value);
 
 		template<typename T>
 		T PI() { return static_cast<T>(3.141592653589793238462643383279502884L); }
