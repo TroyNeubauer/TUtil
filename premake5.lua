@@ -11,6 +11,10 @@ newoption {
 	}
 }
 
+newoption {
+	trigger     = "coverage",
+	description = "Compile with code coverage enabled"
+}
 
 function mkdirs(file)
 	local total = "."
@@ -128,6 +132,11 @@ project "TUtil"
 		"LIBARCHIVE_STATIC",
 	}
 
+	if _OPTIONS["coverage"] then
+		buildoptions { "--coverage", "-fprofile-abs-path" }
+	end
+
+
 	filter "system:windows"
 		defines "_CRT_SECURE_NO_WARNINGS"
 
@@ -182,6 +191,17 @@ project "Test"
 	defines
 	{
 	}
+	
+	if _OPTIONS["coverage"] then
+		buildoptions { "-fprofile-abs-path" }
+
+		if os.target() == "linux" then
+			links
+			{
+				"gcov",
+			}
+		end
+	end
 
 	filter "system:windows"
 		defines "_CRT_SECURE_NO_WARNINGS"
