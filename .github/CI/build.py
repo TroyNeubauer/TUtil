@@ -56,7 +56,7 @@ else:
 	print('Unknown OS! ' + osName)
 	sys.exit(1)
 
-
+premakeCommand += '--CI '
 
 if coverage:
 	premakeCommand += '--coverage '
@@ -115,24 +115,24 @@ print('env: ' + str(env))
 
 run(command, env)
 
+if compiler != "emcc":
+	print("Running test")
 
-print("Running test")
+	if osName == "windows":
+		slash = '\\'
+	else:
+		slash = '/'
 
-if osName == "windows":
-	slash = '\\'
-else:
-	slash = '/'
+	if buildConfiguration == "debug":
+		testExePath = "bin" + slash + "Debug-"
+	else:
+		testExePath = "bin" + slash + "Release-"
+	testExePath += osName + "-x86_64" + slash + "Test" + slash + "Test"
 
-if buildConfiguration == "debug":
-	testExePath = "bin" + slash + "Debug-"
-else:
-	testExePath = "bin" + slash + "Release-"
-testExePath += osName + "-x86_64" + slash + "Test" + slash + "Test"
+	if osName == "windows":
+		testExePath += ".exe"
 
-if osName == "windows":
-	testExePath += ".exe"
-
-run(testExePath)
+	run(testExePath)
 
 if coverage:
 	run("./GetCodeGCOV.sh")

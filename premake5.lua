@@ -15,6 +15,11 @@ newoption {
 	description = "Compile with code coverage enabled"
 }
 
+newoption {
+	trigger     = "CI",
+	description = "True to indicate that this is being built on a continous integration server"
+}
+
 local function add_new_gcc_toolset(name, prefix, suffix)
 	local gcc                         = premake.tools.gcc
 	local new_toolset                 = {}  
@@ -124,6 +129,13 @@ workspace "TUtil"
 		add_new_gcc_toolset("gcc-9", "/usr/bin/", "-9")--Force gcc9
 		toolset "gcc-9"
 		print "Forcing gcc-9"
+	end
+
+	if _OPTIONS["CI"] then
+		defines
+		{
+			"CI_BUILD",
+		}
 	end
 	
 
