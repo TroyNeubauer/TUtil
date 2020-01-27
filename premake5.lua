@@ -112,6 +112,10 @@ workspace "TUtil"
 		"Release",
 	}
 
+	if os.target() == "emscripten" then
+		require("emscripten")
+	end
+
 	if _OPTIONS["compiler"] ~= "" then
 		print("Using compiler ".._OPTIONS["compiler"])
 		toolset(_OPTIONS["compiler"])

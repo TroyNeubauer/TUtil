@@ -2,7 +2,7 @@
 TUtil/src/vendor/*
 
 **/bin/
-!vendor/bin/
+!vendor/premake/bin/
 **/bin-int/
 
 #Visual Studio
