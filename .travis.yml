@@ -5,7 +5,7 @@ matrix:
     #Linux - Emscripten
     - os: linux
       env:
-        - BUILD_CONFIG=dist
+        - BUILD_CONFIG=release
         - COMPILER=emcc
         - COVERAGE=false
     # Windows:
@@ -17,11 +17,6 @@ matrix:
     - os: windows
       env:
         - BUILD_CONFIG=release
-        - COMPILER=msvc
-        - COVERAGE=false
-    - os: windows
-      env:
-        - BUILD_CONFIG=dist
         - COMPILER=msvc
         - COVERAGE=false
     # Desktop Linux:
@@ -36,11 +31,6 @@ matrix:
         - BUILD_CONFIG=release
         - COMPILER=gcc
         - COVERAGE=false
-    - os: linux
-      env:
-        - BUILD_CONFIG=dist
-        - COMPILER=gcc
-        - COVERAGE=false
     #Linux - Clang
     - os: linux
       env:
@@ -50,11 +40,6 @@ matrix:
     - os: linux
       env:
         - BUILD_CONFIG=release
-        - COMPILER=clang
-        - COVERAGE=false
-    - os: linux
-      env:
-        - BUILD_CONFIG=dist
         - COMPILER=clang
         - COVERAGE=false
 

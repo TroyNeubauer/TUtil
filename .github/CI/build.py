@@ -71,13 +71,11 @@ elif compiler == 'clang':
 	premakeCommand += '--os=' + osName + ' --compiler=clang gmake2'
 
 elif compiler == 'emcc':
-	premakeCommand += '--os=emscripten --scripts=vendor/premake/scripts gmake2'
+	premakeCommand += '--os=emscripten --compiler=emcc --scripts=vendor/premake/scripts gmake2'
 
 else:
 	print('Unknown compiler! ' + compiler)
 	sys.exit(1)
-
-run("tree")
 
 run(premakeCommand)
 
@@ -117,14 +115,22 @@ print('env: ' + str(env))
 
 run(command, env)
 
-run("tree")
 
 print("Running test")
-run("bin/Debug-linux-x86_64/Test/Test")
 
+if buildConfiguration == "debug":
+	testExePath = "bin/Debug-"
+else:
+	testExePath = "bin/Release-"
+testExePath += osName + "-x86_64/Test/Test"
+
+if osName == "windows":
+	testExePath += ".exe"
+
+run(testExePath)
 
 if coverage:
 	print("Uploading coverage report!")
-	run("bash <(curl -s https://codecov.io/bash)")
+	run("curl -s https://codecov.io/bash")
 
 
