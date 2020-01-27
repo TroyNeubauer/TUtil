@@ -71,7 +71,7 @@ elif compiler == 'clang':
 	premakeCommand += '--os=' + osName + ' --compiler=clang gmake2'
 
 elif compiler == 'emcc':
-	premakeCommand += '--os=emscripten --compiler=emcc --scripts=vendor/premake/scripts gmake2'
+	premakeCommand += '--os=emscripten --scripts=vendor/premake/scripts gmake2'
 
 else:
 	print('Unknown compiler! ' + compiler)
@@ -131,6 +131,8 @@ run(testExePath)
 
 if coverage:
 	print("Uploading coverage report!")
-	run("curl -s https://codecov.io/bash")
+	run("curl -s https://codecov.io/bash > codecov.sh")
+	run("chmod +x codecov.sh")
+	run("./codecov.sh")
 
 
