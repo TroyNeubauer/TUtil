@@ -115,7 +115,7 @@ workspace "TUtil"
 		require("emscripten")
 	end
 
-	if _OPTIONS["compiler"] ~= "" then
+	if _OPTIONS["compiler"] and _OPTIONS["compiler"] ~= "" then
 		print("Using compiler ".._OPTIONS["compiler"])
 		toolset(_OPTIONS["compiler"])
 	end
