@@ -112,12 +112,13 @@ namespace TUtil {
 		fread(data, p_Bytes, 1, file);
 		fclose(file);
 
+		*p_Error = FileError::NONE;
 		return data;
 	}
 
-	void FileSystem::UnmapFile(void* file)
+	void FileSystem::UnmapFile(const void* file)
 	{
-		uint8_t* data = reinterpret_cast<uint8_t*>(file);
+		const uint8_t* data = reinterpret_cast<const uint8_t*>(file);
 		delete[] data;
 	}
 

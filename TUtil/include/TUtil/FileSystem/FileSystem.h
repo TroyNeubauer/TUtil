@@ -27,7 +27,7 @@ namespace TUtil {
 		//Maps a section of a file into virtual memory
 		//This function returns the pointer to the memory and the length of the file
 		static void* MapFile(const char* file, FileOpenOptions options, std::uint64_t& fileLength, FileError* error, std::uint64_t bytes = ENTIRE_FILE, std::uint64_t offset = 0);
-		static void UnmapFile(void* file);
+		static void UnmapFile(const void* file);
 
 		//The following functions return true if their operation succeeded and false otherwise.
 		static bool Exists(const char* path);

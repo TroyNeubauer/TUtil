@@ -220,14 +220,17 @@ namespace TUtil {
 		}
 		CloseHandle(viewHandle);//Clean up the other resources
 		CloseHandle(handle);
+
+		*p_Error = FileError::NONE;
 		return data;
+
 	fail:
 		CloseHandle(handle);
 		return nullptr;
 
 	}
 
-	void FileSystem::UnmapFile(void* file)
+	void FileSystem::UnmapFile(const void* file)
 	{
 		UnmapViewOfFile(file);
 	}
