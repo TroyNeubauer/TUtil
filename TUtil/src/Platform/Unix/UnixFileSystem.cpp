@@ -172,7 +172,7 @@ namespace TUtil {
 		auto it = s_FileMappings.find(file);
 		if (it != s_FileMappings.end())
 		{
-			munmap(file, it->second);
+			munmap(const_cast<void*>(file), it->second);
 			s_FileMappings.erase(it);
 		}
 	}
