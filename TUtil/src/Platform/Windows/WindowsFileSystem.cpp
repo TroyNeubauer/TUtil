@@ -63,9 +63,10 @@ namespace TUtil {
 
 	std::uint64_t FileSystem::FileSize(const char* path)
 	{
-		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		HANDLE handle = CreateFileW(ToUTF16(path), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 		if (handle == INVALID_HANDLE_VALUE)
 		{
+			DWORD error = GetLastError();
 			return INVALID_FILE;
 		}
 		LARGE_INTEGER size;
