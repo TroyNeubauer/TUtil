@@ -22,9 +22,9 @@ namespace TUtil {
 		return *this;
 	}
 
-	uint64_t Timer::Nanos()
+	std::uint64_t Timer::Nanos()
 	{
-		uint64_t seconds = end.tv_sec - start.tv_sec;
+		std::uint64_t seconds = end.tv_sec - start.tv_sec;
 		return 1000000000ULL * seconds + end.tv_nsec - start.tv_nsec;
 	}
 

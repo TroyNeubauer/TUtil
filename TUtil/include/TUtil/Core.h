@@ -1,9 +1,9 @@
 #pragma once
 
 //Common includes
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdint>
+#include <cstdlib>
 
 //========== COMPILER detect ==========
 #if defined(__EMSCRIPTEN__)

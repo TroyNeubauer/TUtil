@@ -9,10 +9,10 @@ namespace TUtil {
 
 	const char* FileErrorToString(FileError error)
 	{
-		if ((uint64_t) error >= s_ErrorNamesLength)
+		if ((std::uint64_t) error >= s_ErrorNamesLength)
 			return "Invalid Error! Out of bounds";
 		else
-			return fileErrorNames[(uint64_t) error];
+			return fileErrorNames[(std::uint64_t) error];
 	}
 
 }

@@ -16,6 +16,8 @@ void EqualCase(F func)
 	vec2.reserve(1000000);
 	std::fill(vec1.begin(), vec1.end(), 'a');
 	std::fill(vec2.begin(), vec2.end(), 'a');
+	vec1.push_back('\0');
+	vec2.push_back('\0');
 
 	REQUIRE(func("test", "test"));
 	REQUIRE(func("I am equal", "I am equal"));

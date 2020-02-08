@@ -15,7 +15,7 @@ namespace TUtil {
 	public:
 		static File* Open(Path& path, FileOpenOptions options = DEFAULT_OPTIONS, FileError* error = nullptr);
 
-		File(const Path& path, FileOpenOptions options) : m_Path(path), m_Length((uint64_t) -1),
+		File(const Path& path, FileOpenOptions options) : m_Path(path), m_Length((std::uint64_t) -1),
 			m_Read(options & FileOpenOptions::READ), m_Write(options& FileOpenOptions::WRITE), m_Append(options & FileOpenOptions::APPEND) {}
 
 		//No copying
@@ -23,7 +23,7 @@ namespace TUtil {
 		File(File&& other);
 
 		//Returns the length of the file in bytes
-		inline uint64_t Length() { return m_Length; }
+		inline std::uint64_t Length() { return m_Length; }
 
 		inline bool CanRead() { return m_Read; }
 		inline bool CanWrite() { return m_Write; }
@@ -31,12 +31,12 @@ namespace TUtil {
 		virtual void Save() = 0;
 
 		template<typename T>
-		inline void Write(T* data, uint64_t elements, uint64_t offset = 0) { Write(static_cast<void*>(data), sizeof(T) * elements, offset); }
-		virtual void Write(void* data, uint64_t bytes, uint64_t offset = 0) = 0;
+		inline void Write(T* data, std::uint64_t elements, std::uint64_t offset = 0) { Write(static_cast<void*>(data), sizeof(T) * elements, offset); }
+		virtual void Write(void* data, std::uint64_t bytes, std::uint64_t offset = 0) = 0;
 
 		template<typename T>
-		inline void Read(T* data, uint64_t elements, uint64_t offset = 0) { Read(static_cast<void*>(data), sizeof(T) * elements, offset); }
-		virtual void Read(void* data, uint64_t bytes, uint64_t offset = 0) = 0;
+		inline void Read(T* data, std::uint64_t elements, std::uint64_t offset = 0) { Read(static_cast<void*>(data), sizeof(T) * elements, offset); }
+		virtual void Read(void* data, std::uint64_t bytes, std::uint64_t offset = 0) = 0;
 
 
 		//Returns true if calling Data() is allowed. This is the case for memory mapped files or files backed by a block of memory
@@ -65,7 +65,7 @@ namespace TUtil {
 
 	protected:
 		const Path m_Path;
-		uint64_t m_Length;
+		std::uint64_t m_Length;
 		const bool m_Read, m_Write, m_Append;
 	};
 
@@ -77,8 +77,8 @@ namespace TUtil {
 
 		virtual void Save();
 
-		virtual void Write(void* data, uint64_t bytes, uint64_t offset = 0);
-		virtual void Read(void* data, uint64_t bytes, uint64_t offset = 0);
+		virtual void Write(void* data, std::uint64_t bytes, std::uint64_t offset = 0);
+		virtual void Read(void* data, std::uint64_t bytes, std::uint64_t offset = 0);
 
 		inline virtual bool HasDirectAccess() { return true; }
 		inline virtual void* Data() { return m_Data; }
@@ -96,12 +96,12 @@ namespace TUtil {
 	class MemoryMappedFile : public File
 	{
 	public:
-		MemoryMappedFile(const Path& path, FileOpenOptions options, FileError* error, uint8_t* data, uint64_t length);
+		MemoryMappedFile(const Path& path, FileOpenOptions options, FileError* error, uint8_t* data, std::uint64_t length);
 
 		virtual void Save();
 
-		virtual void Write(void* data, uint64_t bytes, uint64_t offset = 0);
-		virtual void Read(void* data, uint64_t bytes, uint64_t offset = 0);
+		virtual void Write(void* data, std::uint64_t bytes, std::uint64_t offset = 0);
+		virtual void Read(void* data, std::uint64_t bytes, std::uint64_t offset = 0);
 
 		inline virtual bool HasDirectAccess() { return true; }
 		inline virtual void* Data() { return m_Data; }

@@ -5,9 +5,9 @@
 namespace TUtil {
 	namespace Math {
 
-		uint64_t LogFloor(uint64_t value)
+		std::uint64_t LogFloor(std::uint64_t value)
 		{
-			const static uint64_t tab64[64] = {
+			const static std::uint64_t tab64[64] = {
 			63,  0, 58,  1, 59, 47, 53,  2,
 			60, 39, 48, 27, 54, 33, 42,  3,
 			61, 51, 37, 40, 49, 18, 28, 20,
@@ -23,7 +23,7 @@ namespace TUtil {
 			value |= value >> 8;
 			value |= value >> 16;
 			value |= value >> 32;
-			return tab64[((uint64_t)((value - (value >> 1ULL)) * 0x07EDD5E59A4E28C2)) >> 58ULL];
+			return tab64[((std::uint64_t)((value - (value >> 1ULL)) * 0x07EDD5E59A4E28C2)) >> 58ULL];
 		}
 	}
 }

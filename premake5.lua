@@ -1,16 +1,59 @@
 newoption {
 	trigger     = "compiler",
-	value       = "compiler",
 	description = "Choose a compiler",
-	default     = "",
 	allowed =
 	{
-		{ "clang",    "Clang LLVM Compiler" },
-		{ "gcc",  "GNU Compiler" },
-		{ "msc",  "MSVC (Windows only)" },
+		{ "clang",	"Clang LLVM Compiler" },
+		{ "gcc",	"GNU Compiler" },
+		{ "msc",	"MSVC (Windows only)" },
+		{ "", 		"Default" }
 	}
 }
 
+newoption {
+	trigger     = "coverage",
+	description = "Compile with code coverage enabled"
+}
+
+newoption {
+	trigger     = "CI",
+	description = "True to indicate that this is being built on a continous integration server"
+}
+
+local function add_new_gcc_toolset(name, prefix, suffix)
+	local gcc                         = premake.tools.gcc
+	local new_toolset                 = {}  
+	new_toolset.getcflags             = gcc.getcflags
+	new_toolset.getcxxflags           = gcc.getcxxflags
+	new_toolset.getforceincludes      = gcc.getforceincludes
+	new_toolset.getldflags            = gcc.getldflags
+	new_toolset.getcppflags           = gcc.getcppflags
+	new_toolset.getdefines            = gcc.getdefines
+	new_toolset.getincludedirs        = gcc.getincludedirs
+	new_toolset.getLibraryDirectories = gcc.getLibraryDirectories
+	new_toolset.getlinks              = gcc.getlinks
+	new_toolset.getundefines          = gcc.getundefines
+	new_toolset.getmakesettings       = gcc.getmakesettings
+	new_toolset.getrunpathdirs        = gcc.getrunpathdirs
+
+	new_toolset.toolset_prefix        = prefix
+	new_toolset.toolset_suffix		  = suffix
+
+	function new_toolset.gettoolname (cfg, tool)  
+		if tool == "cc" then
+			name = new_toolset.toolset_prefix.."gcc"..new_toolset.toolset_suffix
+		elseif tool == "cxx" then
+			name = new_toolset.toolset_prefix.."g++"..new_toolset.toolset_suffix
+		elseif tool == "ar" then
+			name = new_toolset.toolset_prefix.."ar"
+		end
+		return name
+	end  
+
+	premake.tools[name] = new_toolset
+
+	return name
+end
 
 function mkdirs(file)
 	local total = "."
@@ -73,9 +116,26 @@ workspace "TUtil"
 		"Release",
 	}
 
-	if _OPTIONS["compiler"] ~= "" then
+	if os.target() == "emscripten" then
+		require("emscripten")
+	end
+
+	if _OPTIONS["compiler"] and _OPTIONS["compiler"] ~= "" then
 		print("Using compiler ".._OPTIONS["compiler"])
 		toolset(_OPTIONS["compiler"])
+	end
+
+	if _OPTIONS["coverage"] and _OPTIONS["compiler"] == "gcc" then
+		add_new_gcc_toolset("gcc-9", "/usr/bin/", "-9")--Force gcc9
+		toolset "gcc-9"
+		print "Forcing gcc-9"
+	end
+
+	if _OPTIONS["CI"] then
+		defines
+		{
+			"CI_BUILD",
+		}
 	end
 	
 
@@ -127,6 +187,11 @@ project "TUtil"
 	{
 		"LIBARCHIVE_STATIC",
 	}
+
+	if _OPTIONS["coverage"] then
+		buildoptions { "--coverage", "-fprofile-abs-path" }
+	end
+
 
 	filter "system:windows"
 		defines "_CRT_SECURE_NO_WARNINGS"
@@ -182,6 +247,17 @@ project "Test"
 	defines
 	{
 	}
+
+	if _OPTIONS["coverage"] then
+		buildoptions { "-fprofile-abs-path" }
+
+		if os.target() == "linux" then
+			links
+			{
+				"gcov",
+			}
+		end
+	end
 
 	filter "system:windows"
 		defines "_CRT_SECURE_NO_WARNINGS"

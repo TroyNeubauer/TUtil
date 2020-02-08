@@ -17,7 +17,7 @@
 namespace TUtil {
 
 	static SYSTEM_INFO info = {};
-	static uint64_t timerResulution = 0;
+	static std::uint64_t timerResulution = 0;
 
 	//total CPU usage
 	static PDH_HQUERY cpuQuery;
@@ -71,7 +71,7 @@ namespace TUtil {
 		GlobalMemoryStatusEx(memInfo);
 	}
 
-	uint64_t System::GetTotalMachineVirtualMemory() {
+	std::uint64_t System::GetTotalMachineVirtualMemory() {
 		MEMORYSTATUSEX memInfo;
 		GetMemInfo(&memInfo);
 
@@ -79,7 +79,7 @@ namespace TUtil {
 		return totalVirtualMem;
 	}
 
-	uint64_t System::GetSystemVirtualMemoryUsage() {
+	std::uint64_t System::GetSystemVirtualMemoryUsage() {
 		MEMORYSTATUSEX memInfo;
 		GetMemInfo(&memInfo);
 
@@ -87,7 +87,7 @@ namespace TUtil {
 		return virtualMemUsed;
 	}
 
-	uint64_t System::GetProcessVirtualMemoryUsage() {
+	std::uint64_t System::GetProcessVirtualMemoryUsage() {
 		PROCESS_MEMORY_COUNTERS_EX pmc;
 		GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
 
@@ -96,7 +96,7 @@ namespace TUtil {
 	}
 
 	//stats for physical memory
-	uint64_t System::GetTotalMachinePhysicalMemory() {
+	std::uint64_t System::GetTotalMachinePhysicalMemory() {
 		MEMORYSTATUSEX memInfo;
 		GetMemInfo(&memInfo);
 
@@ -104,7 +104,7 @@ namespace TUtil {
 		return totalPhysMem;
 	}
 
-	uint64_t System::GetSystemPhysicalMemoryUsage() {
+	std::uint64_t System::GetSystemPhysicalMemoryUsage() {
 		MEMORYSTATUSEX memInfo;
 		GetMemInfo(&memInfo);
 
@@ -112,7 +112,7 @@ namespace TUtil {
 		return physMemUsed;
 	}
 
-	uint64_t System::GetProcessPhysicalMemoryUsage() {
+	std::uint64_t System::GetProcessPhysicalMemoryUsage() {
 		PROCESS_MEMORY_COUNTERS_EX pmc;
 		GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
 
@@ -160,17 +160,17 @@ namespace TUtil {
 		}
 	}
 
-	uint64_t System::PageSize() {
+	std::uint64_t System::PageSize() {
 		GetSystemInfo();
 		return info.dwPageSize;
 	}
 
-	uint64_t System::AllocationGranularity() {
+	std::uint64_t System::AllocationGranularity() {
 		GetSystemInfo();
 		return info.dwAllocationGranularity;
 	}
 
-	uint64_t System::PerformanceCounterResulution()
+	std::uint64_t System::PerformanceCounterResulution()
 	{
 		if (timerResulution == 0) {
 			LARGE_INTEGER result;

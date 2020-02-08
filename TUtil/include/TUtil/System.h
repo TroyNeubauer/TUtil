@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdint.h>
-#include <stdlib.h>
+#include <cstdint>
+#include <cstdlib>
 
 #ifdef T_PLATFORM_WINDOWS
 	#include <malloc.h>
@@ -25,14 +25,14 @@ namespace TUtil {
 		inline static void FastDelete(void* ptr);
 
 		//Stats for virtual memory
-		static uint64_t GetTotalMachineVirtualMemory();//The total amount of virtual memory avilable to the system in bytes
-		static uint64_t GetSystemVirtualMemoryUsage();//The amount of virtual memory being currently used on this machine in bytes
-		static uint64_t GetProcessVirtualMemoryUsage();//The amount of virtual memory used by this process in bytes
+		static std::uint64_t GetTotalMachineVirtualMemory();//The total amount of virtual memory avilable to the system in bytes
+		static std::uint64_t GetSystemVirtualMemoryUsage();//The amount of virtual memory being currently used on this machine in bytes
+		static std::uint64_t GetProcessVirtualMemoryUsage();//The amount of virtual memory used by this process in bytes
 
 		//stats for physical memory
-		static uint64_t GetTotalMachinePhysicalMemory();//The amount of physical ram avilable to this machine in bytes
-		static uint64_t GetSystemPhysicalMemoryUsage();//The amount of physical ram used by this machine in bytes
-		static uint64_t GetProcessPhysicalMemoryUsage();//The amount of physical ram used by this process in bytes
+		static std::uint64_t GetTotalMachinePhysicalMemory();//The amount of physical ram avilable to this machine in bytes
+		static std::uint64_t GetSystemPhysicalMemoryUsage();//The amount of physical ram used by this machine in bytes
+		static std::uint64_t GetProcessPhysicalMemoryUsage();//The amount of physical ram used by this process in bytes
 
 		static float GetSystemCPUUsagePercent();//from [0,100] indicates the total CPU usage across all cores
 		static float GetProcessCPUUsagePercent();//from [0,100] indicates the total CPU usage across all cores by this process
@@ -42,9 +42,9 @@ namespace TUtil {
 		//Returns true if a key press within the command line connected to this process is detected
 		static bool KBHit();
 	
-		static uint64_t PageSize();
-		static uint64_t AllocationGranularity();
-		static uint64_t PerformanceCounterResulution();
+		static std::uint64_t PageSize();
+		static std::uint64_t AllocationGranularity();
+		static std::uint64_t PerformanceCounterResulution();
 	};
 
 	//Definitions to template functions

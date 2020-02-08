@@ -2,13 +2,17 @@
 TUtil/src/vendor/*
 
 **/bin/
-!vendor/bin/
+!vendor/premake/bin/
 **/bin-int/
 
 #Visual Studio
 **/.vs/
 **/*.sln
 **/*.vcxproj*
+
+#VSCode
+.vscode/
+**/test/
 
 #make
 **/Makefile
@@ -26,3 +30,4 @@ TUtil/src/vendor/*
 
 .cproject
 .settings/
+

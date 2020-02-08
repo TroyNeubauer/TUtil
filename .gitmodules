@@ -5,3 +5,6 @@
 	path = TUtil/vendor/libarchive
 	url = https://github.com/TroyNeubauer/libarchive.git
 	branch = release
+[submodule "vendor/premake/scripts"]
+	path = vendor/premake/scripts
+	url = https://github.com/TroyNeubauer/premake-emscriptenplatform.git

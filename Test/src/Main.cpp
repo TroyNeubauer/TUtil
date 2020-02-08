@@ -5,7 +5,7 @@
 int main(int argc, char* const argv[]) {
 	int result = Catch::Session().run(argc, argv);
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(CI_BUILD)
 	system("PAUSE");
 #endif
 	return result;
