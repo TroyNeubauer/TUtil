@@ -70,8 +70,9 @@ end
 function copySrcFile(file)
 	local destPath = "./TUtil/src/vendor/"..file
 	mkdirs(destPath)
+	local stats = os.stat(destFile)
+	print("File: "..destFile..", size: "..stats.size..", time: "..stats.mtime)
 
-	print("Copying: "..destPath)
 	os.copyfile("./TUtil/vendor/"..file, destPath)
 end
 
@@ -90,6 +91,8 @@ function copySrcFiles(path, path2)
 			local destFile = destPath.."/"..file
 			mkdirs(destFile)
 			--print("copying: "..srcFile.." to: "..destFile)
+			local stats = os.stat(destFile)
+			print("File: "..destFile..", size: "..stats.size..", time: "..stats.mtime)
 			os.copyfile(srcFile, destFile)
 		end
 	end
@@ -99,8 +102,9 @@ end
 function copyHeaderFile(file)
 	local destPath = "./TUtil/include/TUtil/vendor/"..file
 	mkdirs(destPath)
+	local stats = os.stat(destFile)
+	print("File: "..destFile..", size: "..stats.size..", time: "..stats.mtime)
 
-	print("Copying: "..destPath)
 	os.copyfile("./TUtil/vendor/"..file, destPath)
 
 end
@@ -158,8 +162,6 @@ project "TUtil"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
-	print "Copying dependent files..."
-
 	files
 	{
 		"%{prj.name}/src/**.cpp",
@@ -174,7 +176,7 @@ project "TUtil"
 		"TUtil/vendor/libarchive/libarchive",
 	}
 
-	print "Copying dependent files..."
+	print "Copying dependent files...1"
 	copyHeaderFile("str/Str.h")
 	copySrcFile("str/Str.cpp")
 	copySrcFiles("libarchive/libarchive", "libarchive")
