@@ -126,7 +126,7 @@ namespace TUtil {
 	}
 
 
-	static std::unordered_map<void*, size_t> s_FileMappings;
+	static std::unordered_map<const void*, size_t> s_FileMappings;
 
 	//Use of p_ to denote parameters from local vars in this long function
 	void* FileSystem::MapFile(const char* p_File, FileOpenOptions p_Options, std::uint64_t& p_FileLength, FileError* p_Error, std::uint64_t p_Bytes, std::uint64_t p_Offset)
@@ -162,15 +162,17 @@ namespace TUtil {
 		}
 		close(fd);
 		s_FileMappings[result] = p_Bytes;
+
+		*p_Error = FileError::NONE;
 		return result;
 	}
 
-	void FileSystem::UnmapFile(void* file)
+	void FileSystem::UnmapFile(const void* file)
 	{
 		auto it = s_FileMappings.find(file);
 		if (it != s_FileMappings.end())
 		{
-			munmap(file, it->second);
+			munmap(const_cast<void*>(file), it->second);
 			s_FileMappings.erase(it);
 		}
 	}
