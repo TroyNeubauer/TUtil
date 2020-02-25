@@ -67,13 +67,30 @@ function mkdirs(file)
 	end
 end
 
+function myCopyFile(srcFile, destFile)
+	local srcStats = os.stat(srcFile)
+
+	local destStats = os.stat(destFile)
+	if srcStats == nil then
+		print("ERROR: Failed to find src file: "..srcFile)
+		return
+	end
+	if destStats ~= nil then
+		if destStats.mtime > srcStats.mtime then
+			return
+		end
+	end
+
+
+	os.copyfile(srcFile, destPath)
+
+end
+
 function copySrcFile(file)
 	local destPath = "./TUtil/src/vendor/"..file
 	mkdirs(destPath)
-	local stats = os.stat(destFile)
-	print("File: "..destFile..", size: "..stats.size..", time: "..stats.mtime)
 
-	os.copyfile("./TUtil/vendor/"..file, destPath)
+	myCopyFile("./TUtil/vendor/"..file, destPath)
 end
 
 local function ends_with(str, ending)
@@ -91,21 +108,20 @@ function copySrcFiles(path, path2)
 			local destFile = destPath.."/"..file
 			mkdirs(destFile)
 			--print("copying: "..srcFile.." to: "..destFile)
-			local stats = os.stat(destFile)
-			print("File: "..destFile..", size: "..stats.size..", time: "..stats.mtime)
-			os.copyfile(srcFile, destFile)
+			myCopyFile(srcFile, destFile)
 		end
 	end
 end
 
 
 function copyHeaderFile(file)
-	local destPath = "./TUtil/include/TUtil/vendor/"..file
-	mkdirs(destPath)
-	local stats = os.stat(destFile)
-	print("File: "..destFile..", size: "..stats.size..", time: "..stats.mtime)
+	local destFile = "./TUtil/include/TUtil/vendor/"..file
+	mkdirs(destFile)
 
-	os.copyfile("./TUtil/vendor/"..file, destPath)
+	print("Copying: "..destFile)
+	local srcFile = "./TUtil/vendor/"..file
+
+	myCopyFile(srcFile, destFile)
 
 end
 
@@ -176,7 +192,7 @@ project "TUtil"
 		"TUtil/vendor/libarchive/libarchive",
 	}
 
-	print "Copying dependent files...1"
+	print "Copying dependent files..."
 	copyHeaderFile("str/Str.h")
 	copySrcFile("str/Str.cpp")
 	copySrcFiles("libarchive/libarchive", "libarchive")
