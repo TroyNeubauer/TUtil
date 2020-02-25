@@ -82,7 +82,7 @@ function myCopyFile(srcFile, destFile)
 	end
 
 
-	os.copyfile(srcFile, destPath)
+	os.copyfile(srcFile, destFile)
 
 end
 
