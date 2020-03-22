@@ -115,13 +115,19 @@ project "TUtil"
 	}
 
 	filter "system:windows or macosx or linux"
+		if binLocationOverride then
+			targetdir (binLocationOverride.."bin/" .. outputdir)
+			objdir (binLocationOverride.."bin-int/" .. outputdir)
+		else
+			targetdir ("bin/" .. outputdir)
+			objdir ("bin-int/" .. outputdir)
+		end
+
+	filter "system:emscripten"
+		--On emscripten dump the binaries in the same dir to avoid passing very long path names to the compiler
 		targetdir ("bin/" .. outputdir)
 		objdir ("bin-int/" .. outputdir)
 
-	filter "system:emscripten"
-		targetdir ("bin/" .. emscriptenOutputdir)
-		objdir ("bin-int/" .. emscriptenOutputdir)
-	
 	filter "system:windows"
 		excludes "%{prj.name}/src/Platform/Unix"
 		excludes "%{prj.name}/src/Platform/Emscripten"
