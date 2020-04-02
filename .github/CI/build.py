@@ -43,7 +43,7 @@ print('coverage ' + str(coverage))
 
 premakeCommand = ''
 if osName == 'linux':
-	premakeCommand += 'premake5 '
+	premakeCommand += 'vendor/premake/bin/premake5 '
 
 elif osName == 'windows':
 	premakeCommand += 'call vendor\\premake\\bin\\premake5.exe '

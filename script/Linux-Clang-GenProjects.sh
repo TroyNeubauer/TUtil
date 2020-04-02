@@ -1,2 +1,2 @@
 #!/bin/sh
-premake5 --os=linux --compiler=clang gmake2
+vendor/premake/bin/premake5 --os=linux --compiler=clang gmake2
