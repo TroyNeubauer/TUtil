@@ -4,8 +4,4 @@
 [submodule "TUtil/vendor/libarchive"]
 	path = TUtil/vendor/libarchive
 	url = https://github.com/TroyNeubauer/libarchive.git
-<<<<<<< HEAD
 	branch = release
-=======
-	branch = release
->>>>>>> master
