@@ -31,3 +31,8 @@ TUtil/src/vendor/*
 .cproject
 .settings/
 
+#Android
+**/AndroidManifest.xml
+.modules
+**/build.gradle
+**/CMakeLists.txt
