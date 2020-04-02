@@ -71,7 +71,7 @@ elif compiler == 'clang':
 	premakeCommand += '--os=' + osName + ' --compiler=clang gmake2'
 
 elif compiler == 'emcc':
-	premakeCommand += '--os=emscripten --scripts=vendor/premake/scripts gmake2'
+	premakeCommand += '--os=emscripten gmake2'
 
 else:
 	print('Unknown compiler! ' + compiler)

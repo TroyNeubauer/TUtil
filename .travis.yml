@@ -55,15 +55,6 @@ addons:
 
 install:
   - |
-    if [ $TRAVIS_OS_NAME == "linux" ]
-    then
-      wget https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz -O premake.tar.gz
-      tar -xf premake.tar.gz
-      chmod +x premake5
-      export PATH=$PATH:$(pwd)
-      gcc -v && g++ -v --version
-    fi
-  - |
     if [ $COMPILER == "emcc" ]
     then
       wget -q https://github.com/emscripten-core/emsdk/archive/master.tar.gz
