@@ -52,7 +52,7 @@ function copySrcFiles(path, path2)
 			local srcFile = srcPath.."/"..file
 			local destFile = destPath.."/"..file
 			mkdirs(destFile)
-			--print("copying: "..srcFile.." to: "..destFile)
+			print("copying: "..srcFile.." to: "..destFile)
 			myCopyFile(srcFile, destFile)
 		end
 	end
@@ -70,6 +70,39 @@ function copyHeaderFile(file)
 
 end
 
+function copyHeaderFiles(path, path2)
+	local srcPath = "./TUtil/vendor/"..path
+	local destPath = "./TUtil/include/TUtil/vendor/"..path2
+	print("Copying header files to Folder: "..destPath)
+
+	for file in io.popen("dir \""..srcPath.."\" /b"):lines() do
+		if ends_with(file, ".h") or ends_with(file, ".hpp") then
+			local srcFile = srcPath.."/"..file
+			local destFile = destPath.."/"..file
+			mkdirs(destFile)
+			print("copying: "..srcFile.." to: "..destFile)
+			myCopyFile(srcFile, destFile)
+		end
+	end
+end
+
+function TUtilDependencies()
+	includedirs
+	{
+		"vendor/TUtil/TUtil/include/",
+	}
+
+	links
+	{
+		"TUtil",
+		"bz2",
+		"z",
+		"lz4",
+		"nettle",
+	}
+end
+
+
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/"
 emscriptenOutputdir = "%{cfg.buildcfg}-emcc/"
@@ -84,10 +117,10 @@ project "TUtil"
 	intrinsics "on"
 	systemversion "latest"
 
-
-
 	print "Copying dependent files..."
 	copyHeaderFile("str/Str.h")
+	copyHeaderFiles("libarchive/libarchive", "libarchive")
+
 	copySrcFile("str/Str.cpp")
 	copySrcFiles("libarchive/libarchive", "libarchive")
 

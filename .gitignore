@@ -1,5 +1,8 @@
-# Directories
+#Files copied from vendors
 TUtil/src/vendor/*
+TUtil/include/TUtil/vendor
+!TUtil/include/TUtil/vendor/**/*config.h
+
 
 **/bin/
 !vendor/premake/bin/

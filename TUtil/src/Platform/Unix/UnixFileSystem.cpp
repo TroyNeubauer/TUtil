@@ -150,17 +150,31 @@ namespace TUtil {
 		else if (p_Options & FileOpenOptions::WRITE)
 			flags |= O_WRONLY;
 
+		errno = 0;
 		int fd = open(p_File, flags);
 		if (fd == 0)
 		{
 			*p_Error = FileError::FILE_NOT_FOUND;
+			return nullptr;
 		}
-		void* result = mmap(nullptr, p_Bytes, PROT_READ, MAP_PRIVATE, fd, p_Offset);
-		if (result == nullptr)
+
+
+		flags = MAP_SHARED;
+		if (p_Bytes > (1024L * 1024L * 1024L))
 		{
-			*p_Error = FileError::FILE_NOT_FOUND;
+			flags |= MAP_NORESERVE;
 		}
+
+
+		void* result = mmap(nullptr, p_Bytes, PROT_READ, flags, fd, p_Offset);
 		close(fd);
+		if (result == MAP_FAILED)
+		{
+			//TODO: FILE_NOT_FOUND, ACCESS_DENIED, TOO_MANY_FILES, NOT_ENOUGH_MEMORY, IS_DIRECTORY, IS_FILE, INVALID_PARAMETER, UNKNOWN
+
+			*p_Error = FileError::FILE_NOT_FOUND;
+			return nullptr;
+		}
 		s_FileMappings[result] = p_Bytes;
 
 		*p_Error = FileError::NONE;
